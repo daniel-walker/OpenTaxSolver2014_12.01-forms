@@ -575,7 +575,7 @@ void new_capgain( struct capgain_record **list, char *comment, double buy_amnt,
 }
 
 
-void printf_capgain_list( struct capgain_record *list, int section, char *message )
+void printf_capgain_list( struct capgain_record *list, int section, char const *message )
 {
  struct capgain_record *item;
  char word[4096];
@@ -618,7 +618,7 @@ void free_capgain_list( struct capgain_record **list )
 }
 
 
-void get_gain_and_losses( char *label )
+void get_gain_and_losses( char const *label )
 {
  char comment[4096], date_str1[512], date_str2[512], word[4096];
  double amnt1, amnt2;

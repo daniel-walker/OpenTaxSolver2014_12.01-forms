@@ -119,7 +119,7 @@ int strncasecmp( char *str1, char *str2, int len )
 /* Get Parameter - Get a single value.						*/
 /*   Expect value kinds:  'i'=integer, 'f'=float, 's'=string, 'b'=boolean.	*/
 /*------------------------------------------------------------------------------*/
-void get_parameter( FILE *infile, char kind, void *x, char *emssg )
+void get_parameter( FILE *infile, char kind, void *x, char const *emssg )
 {
  char word[1024], *owrd;
  int i, *ii;
@@ -184,7 +184,7 @@ void get_parameter( FILE *infile, char kind, void *x, char *emssg )
 /* Get Parameters - Get sum of list of values terminated by ";".		*/
 /*   Expect value kinds:  'i'=integer, 'f'=float, 's'=string, 'b'=boolean.	*/
 /*------------------------------------------------------------------------------*/
-void get_parameters( FILE *infile, char kind, void *x, char *emssg )
+void get_parameters( FILE *infile, char kind, void *x, char const *emssg )
 {
  char word[1024], *owrd;
  int i, *ii;
@@ -255,7 +255,7 @@ void get_parameters( FILE *infile, char kind, void *x, char *emssg )
   .   word - output of this routine, single word, without delimiters.   .
   .   delim - list of delimiters, whitepace chars, etc..		.
   .......................................................................*/
-void next_word( char *line, char *word, char *delim )
+void next_word( char *line, char *word, char const *delim )
 {
  int i=0, j=0, m=0, flag=1;
 
@@ -293,7 +293,7 @@ void next_word( char *line, char *word, char *delim )
 /* Probably more accurate than needed.  Usually just need to know if 	*/
 /* buy/sell dates differ by more or less than 1 year.			*/
 /************************************************************************/
-int get_date(char *word, char *emssg )	/* Returns days from 1-1-1980. */
+int get_date(char *word, char const *emssg )	/* Returns days from 1-1-1980. */
 { /* For use in capital gains calculations to determine short/long type. */
  char word1[500], owrd[1000];
  int month, day, year, days;
@@ -377,7 +377,7 @@ void ShowLineNonZero( int j )
 { if (L[j]!=0) showline( j ); }
 
 /* Show-Line with a message. */
-void showline_wmsg( int j, char *msg )	
+void showline_wmsg( int j, char const *msg )	
 { fprintf(outfile,"L%d = %6.2f\t\t%s\n", j, L[j], msg); }
 
 /* Show line only if non-zero. */
@@ -389,7 +389,7 @@ void showline_wrksht( char wrksht, int j, double *x )
 { fprintf(outfile," %c%d = %6.2f\n", wrksht, j, x[j]); }
 
 /* Show-line with specified label and value. */
-void showline_wlabel( char *label, double value )
+void showline_wlabel( char const *label, double value )
 { fprintf(outfile, "%s = %6.2f\n", label, value ); }
 
 /* Show-line with specified label and value. */
@@ -402,7 +402,7 @@ int Round( double x )
 
 
 /* Get a line value. */
-void GetLine( char *linename, double *value )
+void GetLine( char const *linename, double *value )
 {
  char word[500];
  get_parameter( infile, 's', word, linename);
@@ -410,7 +410,7 @@ void GetLine( char *linename, double *value )
 }
 
 /* Get a single line value. */
-void GetLine1( char *linename, double *value )
+void GetLine1( char const *linename, double *value )
 {
  char word[500];
  get_parameter( infile, 's', word, linename);
@@ -418,7 +418,7 @@ void GetLine1( char *linename, double *value )
 }
 
 /* Get a line value, and print it to file. */
-void GetLineF( char *linename, double *value )
+void GetLineF( char const *linename, double *value )
 {
  GetLine( linename, value );
  fprintf(outfile, "%s = %6.2f\n", linename, *value );
