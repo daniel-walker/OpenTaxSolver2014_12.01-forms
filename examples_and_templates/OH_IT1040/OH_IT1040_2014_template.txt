@@ -1,0 +1,75 @@
+Title:  Ohio IT1040 State 2014 Tax Form
+
+{ -- Initial Template -- Common 0 amounts filled-in as 0's, }
+{     Important ???-amounts must be filled-in by most everyone. }
+
+Status      Single      { Single, Married/joint, Married/separate, Head_of_household }
+
+L1	    ??	;	{ Federal Adjusted Gross Income (IRS form 1040, line 37) }
+Exemptions  ??	;       { Exemptions, self=1/depend=2,3,... }
+
+JointCredit   No	{ Answer YES only if Married Joint Filing, & you and spouse each have AGI >= $500. }
+
+L14		;	{ Earned income credit (see the worksheet on page 20). }
+L15		;	{ Ohio adoption credit ($1,500 per child adopted during the year). }
+L16		;	{ Manufacturing equipment grant. }
+
+L19		;	{ Unpaid Ohio Use Tax }
+
+L21	    ??	;	{ Ohio Tax Withheld (box 17 on your W-2) }
+L22		;	{ 1040ES payments, IT 40P extension payments for 2014, 2013 overpayments ... }
+
+{ Additions - add to extent not included in fed adjusted gross income (line 1). }
+L33	;	{ Non-Ohio state or local gov't interest, dividends. }
+L34	;	{ Pass-through Entity addback. }
+
+L35a      ;	{ Fed int+div subject to state tax & misc. fed adj. }
+L35b      ;	{ Reimbursed college tuit. fees deducted prev yrs. }
+L35c      ;	{ Losses, sale of Ohio Public Obligations. }
+L35d      ;	{ Nonmedical withdrawals OH Med. Savings Acct. }
+L35e      ;	{ Reimb. exp. prev. deducted, if reimb. not in FAGI .}
+L35f      ;	{ Lump sum distribution add-back + misc. fed income tax adjustments }
+L35g      ;	{ Adjustment for IRC section 168(k) and 179 depreciation expense }
+
+{ Deductions - see limitations in instructions. }
+L37a	;	{ Fed int + div exempt from state taxation. }
+L37b	;	{ Adjustment for Internal Revenue Code sections 168(k) + 179 deprec. expense }
+L38	;	{ Employee compensation earned in OH by non-residents. }
+L39a	;	{ Military Pay. }
+L39b	;	{ Military Retirement Income. }
+L40a	;	{ State/municipal income tax overpayments. }
+L40b	;	{ Refund or reimbursements shown on IRS form 1040, line 21 }
+L40c	;	{ Repayment of income reported in a prior year, ... }
+L41	;	{ Small business investor income deduction }
+L42	;	{ Disab. & survivor benef. }
+L43	;	{ Qualifying soc. sec. + railroad benefits. } 
+L44a	;	{ Education: Ohio 529 contributions } 
+L44b	;	{ Pell/Ohio College Opportunity taxable grant amounts }
+L45	;	{ Ohio National Guard reimbursements }
+L46a	;	{ Unreimbursed health insurance ... }
+L46b	;	{ Funds deposited into, and earnings of, a medical savings account }
+L46c	;	{ Qualified organ donor expenses }
+L47	;	{ Wage expense not deducted }
+L48     ;	{ Interest from Ohio Public Obligations ... }
+
+L51	;	{ Retirement Income Credit (see instructions for credit table) (Limit $200) }
+L52	;	{ Senior Citizen Credit (Limit $50 per return) }
+L53	;	{ Lump Sum Distribution Credit (you must be 65 years of age or older to claim this credit) }
+L54	;	{ Child and Dependent Care Credit (see instructions and worksheet) }
+L55	;	{ Lump Sum Retirement Credit }
+L57	;	{ Displaced Worker Credit (see instructions & worksheet) }
+L58	;	{ Ohio Political Contributions Credit (Limit $50 single; $100 joint) }
+
+L60	;	{ Portion of line 3 subjected to tax by other states. }
+L63	;	{ 2014 income tax paid to other states ... }
+
+	   	{ For Non-resident / Part-Year Residents: }
+L65	;	{  Income not earned or received in Ohio. }
+
+L68	;	{ Nonrefundable Business Credits, Sched-E line 10 }
+
+L72a    ;       { Refundable Business Jobs Credit }
+L72b    ;       { Refundable Pass-through Credit }
+L72c    ;       { Refundable Histroic Preservation Credit }
+L72d    ;       { Refundable Motion Picture Credit }
+L72e    ;       { Refundable Financial Institutions Tax (FIT) credit }

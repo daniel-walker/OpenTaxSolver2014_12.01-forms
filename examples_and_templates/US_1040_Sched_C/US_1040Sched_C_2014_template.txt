@@ -1,0 +1,74 @@
+Title:  1040 Schedule C Tax Form - 2014
+
+L1		{ Gross receipts }
+		 { Gross receipts or sales }
+		 { Income reported to you on Form W-2 if "Statutory Employee" was checked. }
+	;
+L2		{ Returns and Allowances }
+	;
+L6		{ Other income, fed & state fuel credit }
+	;
+L8		{ Advertising }
+	;
+L9		{ Car & truck expenses }
+	;
+Miles		{ Miles for Line 9, but not already included in Line 9. }
+	;
+L10		{ Commissions & fees }
+	;
+L11		{ Contract labor }
+	;
+L12		{ Depletion }
+	;
+L13		{ Depreciation & Sec 179 expense deduction  }
+	;
+L14		{ Employee benfit programs (other than line 19) }
+	;
+L15		{ Insurance (other than health) }
+	;
+L16a		{ Interest (mortgage paid to banks) }
+	;
+L16b		{ Interest (Other) }
+	;
+L17		{ Legal & professional services }
+	;
+L18		{ Office expense }
+	;
+L19		{ Pension & profit sharing plans }
+	;
+L20a		{ Vehicles and equiment Rent or Lease }
+	;
+L20b		{ Rent or lease Other business property }
+	;
+L21		{ Repairs & maintenance }
+	;
+L22		{ Supplies (not in Part III) }
+	;
+L23		{ Taxes & licenses }
+	;
+L24a		{ Travel }
+	;
+L24b		{ Deductible meals & entertainment }
+	;
+L25		{ Utilities }
+	;
+L26		{ Wages (less employment credits) }
+	;
+L27		{ List other expenses here from line 48 pg 2 }
+	;
+L30		{ Expenses for business use of home (form 8829) }
+	;
+L32a	yes	{ Yes or No, All investment is at risk }
+
+L35		{ Inventory at beginning of year }
+	;
+L36		{ Purchases minus cost of personel items }
+	;
+L37		{ Cost of labor (not paid to yourself) }
+	;
+L38		{ Materials & supplies }
+	;
+L39		{ Other costs }
+	;
+L41		{ Inventory at year end }
+	;

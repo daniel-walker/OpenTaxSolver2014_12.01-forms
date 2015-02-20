@@ -1,0 +1,59 @@
+Title:  NY State 2014 Tax Form IT-201
+
+{ -- Initial Template -- Common 0 amounts filled-in as 0's, }
+{     Important ???-amounts must be filled-in by most everyone. }
+
+FileName   examples_and_templates/US_1040/fed_out.txt { File-name of Federal Return output file. }
+	{ Data for NY Lines 1-19 is collected by scanning Federal return to avoid re-entering it. }
+
+Dependent  no		{ Are you a Dependent on another's return (yes/no) ? }
+
+	{ NY Additions }
+L20	    0	;	{ Interest income from non-NY state or local bonds }
+L21	    0	;	{ Public employee retirement contributions (pg 15) }
+L22	    0	;	{ New York's 529 college savings program distributions (pg 15) }
+L23	    0	;	{ Other (pg 16) }
+
+	{ NY Subtractions }
+L26	    0	;	{ Pensions of NYState, local & fed gov'ts (see page 19) }
+L28	    0	;	{ US Gov't Bond Interest }
+L29	    0	;	{ Pension and annuity income exclusion }
+L30	    0	;	{ New York's 529 college savings program deduction/earnings }
+L31	    0	;	{ Other (see page 20) }
+
+LTcare%	    0   ;	{ Percent of long-term care premiums in Fed-Sched-A line 1, if any. }	
+AddAdj	    0   ;	{ Any additional itemization adjustments (worksheet line k pg 26) }
+CollegeDed  0   ;	{ College tuition itemized deduction (Form IT-272 ) }
+
+L36	    0	;	{ Number of Dependent Exemptions (Pg 24) }
+Exemptions  0		{ Number of NY dependent exemptions, Pg 29. }
+
+L41	    0	;	{ Resident credit, Form IT-112-R or IT-112-C, pg 26 }
+L42	    0	;	{ Other New York State nonrefundable credits }
+L45	    0	;	{ Net Other New York State taxes, Form IT-201-ATT, line 30 }
+NYC_Resident  no ;      { City of New York Resident (yes/no) }
+
+ { City of New York taxes and crefits -- only }
+  L50            ;       { Part-year New York City resident tax }
+  L51            ;       { Other NYC taxes (from IT-201-ATT part III, line 4) }
+  L53            ;       { NYC nonrefundable credits (from IT-201-ATT part IV, line 6-7) }
+ { -- }
+
+L59	    0	;	{ Sales or use tax, pg 29. }
+L60	    0	;	{ Voluntary Gift contibutions, pg 30. }
+L63         0   ;       { Empire State child credit (attach new Form IT-213) }
+L64         0   ;       { NY Child care/dependent credit. Form IT-216. }
+L65	    0	;	{ NY Earned income credit. Form IT-213. }
+L66	    0	;	{ NY State noncustodial parent EIC (attach new Form IT-209) }
+L67	    0	;	{ Real property credit. Form IT-214. }
+L68	    0	;	{ College tution credit. Form IT-272. }
+
+L71	    0	;	{ Other refundable credits, IT-201-ATT line 18)}
+L72	  ???	;	{ Total NY State tax withheld. }
+
+ { NYC Residents only  - City and Yonkers tax withheld. }
+  L73      	; 	{ Total City of NY tax withheld. }
+  L74      	; 	{ Yonkers tax withheld. }
+ { -- }
+
+L75	    0	;	{ Total estimated tax payments (from IT-370) }

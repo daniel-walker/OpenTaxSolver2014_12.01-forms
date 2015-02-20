@@ -1,0 +1,37 @@
+Title:  PA State Tax Form PA-40 for 2014	EXAMPLE
+
+{ EXAMPLE }
+
+Status	    Single	{ Single, Married/Joint, Married/Sep, Widow(er) }
+
+L1a     29812.34	{Gross compensation.}
+	21609.09	 {spouse}
+		;
+L1b         0	        { Unreimbursed employee business expenses.}
+	    0	         {spouse}
+		;
+L2	   34.56	{ Interest Income. }
+	   17.83
+		;
+L3	  143.65	{ Dividend and Capital Gains Distributions Income. }
+	   29.32
+		;
+L4	    0	;	{ Net Income or Loss for Business Operations. }
+L5	    0	;	{ Net Gain or Loss from Sale, Exchange or Disposition of Property. }
+L6	    0	;	{ Net Income or Loss from Rents, Royalties, Patents, or Copyrights. }
+L7	    0   ;	{ Estate or Trust Income. }
+L8	    0   ;	{ Gambling or lottery winnings. }
+L10	    0 	;	{ Other Deductions. }
+
+L13	    813.67	{ Total PA Tax withheld. }
+	    724.12	 {spouse}
+		;
+L14	    0   ;	{ Credit from 2013 PA income tax return. }
+L15	    0 	;	{ 2014 Estimated Installment payments. }
+L16	    0 	;	{ 2014 Extension payment. }
+L17	    0   ;	{ Non-resident tax withheld. }
+L21	    0   ;	{ Tax Back/Tax Forgiveness Credit (Part D line 16 Sched SP). }
+L22	    0   ;	{ Resident credit (Scheds G/RK-1). }
+L23	    0   ;	{ Other credits (Sched OC). }
+L25	    0   ;	{ Use Tax }
+L27         0   ;       { Penalties and underpayment interest. }

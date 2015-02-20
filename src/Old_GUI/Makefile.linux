@@ -1,0 +1,15 @@
+# Before you use this, you need to get the otk_lib from sourceforge.net and unzip it here.
+
+CFLAGS  =
+COPTIM  = -O 
+INCLUDE = -I/usr/X11R6/include
+LDPATH  = -L/usr/X11R6/lib
+LIBS    = -lGLU -lGL -lXmu -lXext -lX11 -lm
+
+
+../../bin/ots_gui:  ots_gui.c otk_lib/otk_lib.c logo_image.c
+	cc -o ../../bin/ots_gui  $(CFLAGS)  $(COPTIM)  $(INCLUDE)  $(LDPATH)   ots_gui.c   $(LIBS)
+
+clean:
+	/bin/rm -fv ../../bin/ots_gui
+

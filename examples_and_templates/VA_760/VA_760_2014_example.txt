@@ -1,0 +1,31 @@
+Title:  VA-760 State 2014 Tax Form
+
+{ -- EXAMPLE ---}
+
+Status      Single      { Single, Married/joint, Married/separate, Head_of_household }
+Exemptions_A  1	;	{ Exemptions_A: self/spouse, dependents. }
+Exemptions_B    ;	{ Exemptions_B: Over 65, Blind for self/spouse. }
+L1	23,890.34 ;	{ Federal Adjusted Gross Income }
+L2		;	{ Additions from attached Schedule ADJ, line 3 }
+L4		;	{ Deduction for age on Jan 1, 2015. }
+L5		;	{ Social Security Act, Tier 1 Railroad Retirement Act benef. }
+L6		;	{ State Income Tax refund or overpayment credit }
+L7		;	{ Subtractions from Schedule ADJ, line 7 }
+L10	    0.0	;	{ Itemized Deductions - Otherwise enter 0.0 for Std. Ded. }
+L11		;	{ State and Local Income Taxes claimed on federal Sched-A. }
+L14		;	{ Deductions from VAGI Schedule ADJ, Line 9. }
+L18		;	{ Spouse Tax Adjustment. }
+L20a	  718.00 ;	{ Virginia tax withheld for 2014. }
+L20b		;	{ Spouse's Virginia tax withheld. }
+L21		;	{ Estimated tax paid for 2014. (form 760ES) }
+L22		;	{ Amount of 2013 overpayment applied toward 2014 estimated tax. }
+L23		;	{ Extension payments (form 760IP). }
+L24		;	{ Tax Credit, Low Income Individuals (Sch. ADJ, line 17) }
+L25		;	{ Credit, Tax Paid to other State (Sch. OSC line 21 ...) }
+L26		;	{ Credit for Political Contributions. }
+L27		;	{ Credits from attached Schedule CR, Section 5, Part 1, Line 1A }
+L31		;	{ Amount of overpayment to credit to next year's estimated tax.}
+L32		;	{ VA College Savings Plan Contributions, Sched-VAC, I-6. }
+L33		;	{ Other voluntary contribitions. }
+L34		;	{ Addition to Tax, Penalty, Interest, Sched-ADJ, Line 21 }
+L35		;	{ Consumer's Use Tax. }

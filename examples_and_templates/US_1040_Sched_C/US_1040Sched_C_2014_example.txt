@@ -1,0 +1,113 @@
+Title:  1040 Schedule C - 2014 - EXAMPLE
+
+
+L1	45,672.34	 { Gross receipts }
+	12,894.00	
+	5,951.67	
+
+		;
+L2	1,563.15	 { Returns and Allowances }
+
+		;
+L6	0	 { Other income, fed & state fuel credit }
+
+		;
+L8	456.78	 { Advertising }
+	198.78	
+
+		;
+L9	1,749.00 { Car & truck expenses }
+	321.12	
+		;
+Miles           { Mileage for Line 9, not already included in Line 9. }
+	4,903
+	9,808
+        ;
+
+L10	1,356.87	 { Commissions & fees }
+	456.32	
+
+		;
+L11	0	 { Contract labor }
+
+		;
+L12	0	 { Depletion }
+
+		;
+L13	3,195	 { Depreciation & Sec 179 expense deduction }
+
+		;
+L14	0	 { Employee benefit programs (other than line 19) }
+
+		;
+L15	1,456	 { Insurance (other than health) }
+
+		;
+L16a	2,489.45	 { Interest (mortgage paid to banks) }
+
+		;
+L16b	0	 { Interest (Other) }
+
+		;
+L17	3,220.54	 { Legal & professional services }
+
+		;
+L18	1,929.00	 { Office expense }
+
+		;
+L19	0	 { Pension & profit sharing plans }
+
+		;
+L20a	5,923.99	 { Vehicles and equiment Rent or Lease }
+
+		;
+L20b	819.11	 { Rent or lease Other business property }
+
+		;
+L21	423.76	 { Repairs & maintenance }
+
+		;
+L22	0	 { Supplies (not in Part III) }
+
+		;
+L23	45.00	 { Taxes & licenses }
+
+		;
+L24a	500.00	 { Travel }
+
+		;
+L24b	40.00	 { Deductible meals & entertainment }
+
+		;
+L25	787.44	 { Utilities }
+
+		;
+L26	11,978.03	 { Wages (less employment credits) }
+
+		;
+L27	0	 { List other expenses here from line 48 pg 2 }
+
+		;
+L30	450.00	 { Expenses for business use of home (form 8829) }
+
+		;
+L32a	yes	 { Yes or No, All investment is at risk }
+L35	10,000.00	 { Inventory at beginning of year }
+
+		;
+L36	2,000.00	 { Purchases minus cost of personel items }
+	-800.00	
+
+		;
+L37	5,500.00	 { Cost of labor (not paid to yourself) }
+
+		;
+L38	3,300.00	 { Materials & supplies }
+
+		;
+L39	0	 { Other costs }
+
+		;
+L41	8,000.00	 { Inventory at year end }
+		;
+		

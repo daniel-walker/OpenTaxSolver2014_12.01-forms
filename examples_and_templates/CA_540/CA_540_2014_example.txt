@@ -1,0 +1,42 @@
+Title:  CA State Tax Form 540 - 2014 -- Example
+
+{ -- Example -- }
+
+FileName   examples_and_templates/US_1040/US_1040_example_out.txt  { File-name of Federal Return output file. }
+        { Data is collected by scanning Federal return to avoid re-entering it. }
+
+{Exemptions}
+L6              no      { Are you a dependent? (yes/no) }
+L8              0       { Enter 0 if not blind, 1 if you or spouse, 2 if both. }
+L9              0       { Enter 1 if you or spouse over 65, 2 if both over 65, 0 if neither}
+L10             0       { Enter number or dependents or 0 (zero). (Do not include self or spouse)}
+
+{Taxable Income}
+L12      29,812.34      {State Wages (List all W2's box 16).}
+         21,609.09 ;
+ Adj		0  ;	{ Adjustments including California lottery losses. Sched540, line 41 (pg 32). }
+ L14            0  ;    { CA Adjustments, Schedule CA 540 line 37 column B.}           
+ L16            0  ;    { CA Adjustments, Schedule CA 540 line 37 column C.}
+
+{Tax Section}
+ L34            0  ;     { Taxes on distributions (sched G-1 or form FTB 5870A), else 0. }
+
+{Special Credits}
+ L40		0  ;	 { Nonrefundable Child + Dependent Care Expenses Credit (pg 11). }
+ L41            0  ;     { New jobs credit, amount generated, else enter 0 }
+ L42            0  ;     { New jobs credit, amount claimed, else enter 0 }
+ L43            0  ;     { Special credit, else enter 0 }
+ L44            0  ;     { Special credit, else enter 0 }
+ L45            0  ;     { More then two credits (pg 12), else enter 0 }
+ L46            0  ;     { Nonrefundable renter's credit (pg 12), else 0 }
+
+{Other Taxes}
+ L61            0  ;    { Alternative minimum tax Sched P (540), else 0 }
+ L62            0  ;    { Mental Health Services Tax. (Instructions pg 13) }
+ L63            0  ;    { Other taxes/credit recapture (pg 13), else 0 }
+
+{Payments}
+ L71      1,119.20 ;     { CA state income tax withheld. }
+ L72         67.21 ;     { Estimated tax paid (pg 13). }
+ L73            0  ;     { Realestate withholing (forms 592-B, 594, 597) (see pg 13). }
+ L74            0  ;     { Excess SDI (pg 13). }

@@ -1,0 +1,79 @@
+Title:  Massachusetts Form 1 Tax Form - 2014 -- Example
+
+{ -- EXAMPLE -- }
+
+{Filing Status}
+
+Status         Married/joint	{Single, Married/Joint, Married/Sep, Head_of_House.}
+
+{Exemptions}
+
+Dependents     2       {Number of Dependents -- DO NOT include yourself or your spouse!}
+
+{Age 65 or over}
+Age65You     FALSE 	{Replace 'FALSE' with 'TRUE' if you are 65 or older}
+Age65Spouse  FALSE 	{Replace 'FALSE' with 'TRUE' if your spouse is 65 or older}
+
+{Blindness}
+BlindYou    FALSE 	{Replace 'FALSE' with 'TRUE' if you are blind}
+BlindSpouse FALSE 	{Replace 'FALSE' with 'TRUE' if your spouse is blind}
+
+{Other Exemptions}
+Med/Dental	; 	{Medical/Dental}
+Adoption 	;	{Adoption}
+
+{Income}
+
+L3	60,000.00	{Wages, salaries, tips (W-2). }
+		;
+L4		;	{Taxable pensions.}
+L5	   180.00;	{Mass Bank Interest}
+L6		;	{ Business income/loss. (Sched C) }
+L7	45,000.00;	{ Rental, royality, REMIC., etc. }
+L8a		;	{ Unemployment }
+L8b		;	{ Lottery }
+L9		;       { Other income, Alimony received. }
+
+{ Deductions }
+
+L11a  	 2,000.00;	{ Amount you paid to SS, Medicare, RR, US, or Mass retirement }
+L11b	 1,200.00;	{ Amount spouse paid to SS, Medicare, RR, US, or Mass retirement }
+L12		;	{ Child under 13, or disabled dependent/spouse }
+L13		0	{ Number of dependents < 12, or deps >= 65, or disabled deps, not more than 2 }
+L14a		;	{ Rental Paid }
+L15		;	{ Other - Sched Y, L17 }
+  
+L20             0       {Interest and Dividends -- Sched B}
+                ;
+
+L23a		;	{ 12% income, from sched B Line 39 }
+L24		;	{ Tax on long-term capital gains, Sched D Line 22 }
+L25		;	{ Credit Capture amount Sch. H-2 }
+L26		;	{ Additional tax on installment sale }
+
+ {Credits}
+L29		0	{ Limited Income Credit }
+L30		0	{ Other credits from Sch Z, line 14 }
+
+L32a		0 	{ Endangered Wildlife }
+L32b		0 	{ Organ Transplant }
+L32c		0 	{ Mass AIDS }
+L32d		0 	{ Mass US Olympic }
+L32e		0 	{ Mass Miltiary Family Relief Fund }
+L32f		0 	{ Homeless Animal Prevention And Care }
+
+L33		0	{ Use tax due on out-of-state purchases }
+L34a		0	{ Health Care Penalty (you) }
+L34b		0	{ Health Care Penalty (spouse) }
+
+{Taxes Paid}
+
+L36	 6,000.00;	{ Mass Income Tax withheld (from W-2's, ...) }
+L37		;	{ 2013 overpayment applied to 2014 estimated tax }
+L38		;	{ 2014 estimated tax payments }
+L39		;	{ Payments made with extension }
+L40b		;	{ EIC: amount from US Return }
+L41		;	{ Senior Circuit Breaker Credit, sched CB }
+L42		;	{ Refundable credits, Sched RF, line 4. }
+
+L45	   1,000 ;	{Overpayment you want applied to next year's estimated tax}

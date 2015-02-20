@@ -1,0 +1,24 @@
+Title:  NC State Tax Form 400 for 2014
+
+{ -- Initial Template -- Common 0 amounts filled-in as 0's, }
+{               Important ???-amounts must be filled-in by most everyone. }
+
+FedReturn  examples_and_templates/US_1040/fed_out.txt	{ File-name of Federal Return output file. }
+
+Status	    ???		{Single, Married/Joint, Married/Sep, Head_of_House, Widow(er)}
+
+L7	0	;	{ Additions to Fed AGI - From Sched-S Part A, Line 4. }
+L9	0	;	{ Deductions from Fed AGI - From Sched-S Part B, Line 12. * }
+L11	0	;	{ Enter 0 to use Std Deduction; Otherwise Itemized Ded. from Sched-S part C, Line 19. }
+L13	1	;	{ Enter 1 for full-year residents. Otherwise amount from Sched-S part D, Line 22. }
+L16	0	;	{ Tax credits. (D-400TC part 3 line 20) }
+L18	   0	;	{ Consumer Use Tax. (pg 10) }
+
+L20	   0	;	{ North Carolina Income Tax Withheld }
+
+		{ Other tax payments. }
+L21a	    0	;	 { 2014 Estimated Tax }
+L21b	    0	;	 { Paid with Extension }
+L21c	    0	;	 { Partnership }
+L21d	    0	;	 { S Coroporation }
+

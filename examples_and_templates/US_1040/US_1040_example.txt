@@ -1,0 +1,141 @@
+Title:  US Federal 1040 Tax Form - 2014 - EXAMPLE
+
+Status     Married/Joint {Single, Married/Joint, Head_of_House, Married/Sep, Widow(er)}
+
+Under65?      Yes       { Age at end of 2014. (Yes/No) If Married/Joint, Y=both-under, N=both-over, 1=One-over }
+
+Dependents     2         {Number of Dependents, self=1, spouse, etc.}
+
+{Income}
+L7      20267.70        {Wages, salaries, tips (W-2's Box-1). }
+        28188.53         {Spouse's}
+                ;
+L8a                     {Interest 1099-INT.  Place these numbers on Schedule-B, Part I. }
+          37.71           {Bank Savings}
+          12.65           {Credit Union}
+          16.85           {Savings Bank}
+                ;
+L9                      {Ordinary Dividends 1099-DIV}
+         70.90            {USX Dividends}
+         44.36            {Fidelity Mutual Funds}
+         64.13            {  Growth Fund}
+         74.52            {Company Stock Div}
+                ;
+L9b                     {Qualified Dividends 1099-DIV}
+         70.90            {USX Dividends}
+         14.36            {Fidelity Mutual Funds}
+          0.0             {  Growth Fund}
+         61.25            {Company Stock Div}
+                ;
+L10     625.83  ;       { Taxable refunds. }
+L11             ;       { Alimony received. }
+L12             ;       { Business income/loss. (Sched C) }
+Cap-Gains-A	        { Capital Gains/Losses, 1099-B.  For which Basis Reported to IRS (Form 8949 check-A) }
+			{  Enter for each:  BuyAmnt Date, SellAmnt Date }
+	 -800.99	6-20-11		{ 40 Shares WMT }
+	  950.99	10-12-11
+
+        -3658.22        12-15-99        { 100 Shares XOM }
+         4209.95        1-25-10
+
+        -4949.98        3-26-11         { 500 Shares NAB }
+         6009.01        12-27-11
+                ;
+Cap-Gains-B	        { Capital Gains/Losses, 1099-B.  For which Basis NOT Reported to IRS (Form 8949 check-B) }
+			{  Enter for each:  BuyAmnt Date, SellAmnt Date }
+                ;
+Cap-Gains-C	        { Capital Gains/Losses, 1099-B.  For which Form 8949 (A)+(B) can NOT be checked. (check-C) }
+			{  Enter for each:  BuyAmnt Date, SellAmnt Date }
+                ;
+			{ }
+D4		;	{ Short-term gain from 6252, gain or loss from Forms 4684, 6781, 8824. }
+D5		;	{ Short-term gain/loss from partnerships, S corps, estates, trusts, K-1. }
+D6              ;       { Short-term 2013 loss carryover. Or, LastYear's return output File-name. }
+D11		;       { Gain from Form 4797. }
+D12		;       { Partnership net long-term gains or losses. }
+D13		;       { Cap Gains Distributions - 1099-DIV column 2a. }
+D14             ;       { Long-term 2013 loss carryover. Leave blank if file-name used in line D6. }
+L14             ;       { Other gains or losses. (form 4797) }
+L15b            ;       { Taxable IRA distributions (pg 24) }
+L16b            ;       { Taxable Pensions/annuities (pg 25) }
+L17             ;       { Rent realestate/royalties/partnerships/S corp. Sched E }
+L18             ;       { Farm income/loss. (Sched F) }
+L19             ;       { Unemployment compensation }
+L20b            ;       { Taxable Social security benefits }
+L21             ;       { Other income. (pg 28) }
+
+{Adjusted Gross Income}
+L23             ;       { Educator expenses }
+L24             ;       { Bus. exp.: reservists, artists, ... Attach Form 2106 }
+L25             ;       { Health savings account deduction. Attach Form 8889 }
+L26             ;       { Moving expenses. Attach Form 3903 }
+L27             ;       { Deductable part of self-employment tax. Attach Schedule SE}
+L28             ;       { Self-employed SEP, SIMPLE, and qualified plans }
+L29             ;       { Self-employed health insurance deduction }
+L30             ;       { Penalty on early withdrawal of savings }
+L31a            ;       { Alimony paid }
+L32             ;       { IRA deduction }
+L33             ;       { Student loan interest deduction }
+L34             ;       { Tuition and fees. Form 8917. }
+L35             ;       { Domestic production activities deduction, Form 8903}
+L39             ;       { Number of boxes checked (0-4), line-39:  You, Spouse : >65, blind.}
+
+Collectibles 	;	{ Gains or Losses from Collectibles. (Usually zero.) }
+
+{Tax and Credits}
+ {Itemized deductions from Schedule A}
+ A1             ;       { Unreimbursed medical expenses. }
+ A5                     { State and local income taxes. (W-2's boxes 17 + 19.) }
+        1771.05          {Prop-tax}
+          39.88          { Sate-UI (Unemployment Insurance) }
+        1479.21          { State-tax withheld/owed }
+        1928.35          { Spouse's local tax (paid) }
+		  ;
+ A6             0 ;     { Real estate taxes.}
+ A7             ;       { Personal property taxes. }
+ A8             ;       { Other taxes.}
+ A10            ;       { Home mortgage interest and points}
+ A11            ;       { Home mortgage interest not reported to you on Form 1098.}
+ A12            ;       { Points not reported to you on Form 1098.}
+ A13            ;       { Mortgage insurance premiums (see instructions). }
+ A14            ;       { Investment interest. Attach Form 4952}
+ A16        124.0 ;     { Charity contributions.}
+ A17            ;       { Contributions other than cash or check.}
+ A18            ;       { Carryover from prior year}
+ A20            ;       { Casualty or theft loss(es).}
+ A21            ;       { Unreimbursed employee expenses}
+ A22            ;       { Tax preparation fees}
+ A23            ;       { Other expenses}
+ A28            ;       { Other deductions, listed on Sched-A page A-6.}
+
+L46		;	{ Excess advance premium tax credit repayment. Form 8962. }
+L48             ;       { Foreign tax credit, form 1116 }
+L49             ;       { Child/dependent care expense credits. Form 2441. }
+L50             ;       { Education credits. Form 8863, line 19. }
+L51             ;       { Retirement savings contributions credit. Form 8880. }
+L52             ;       { Child tax credit (Sched 8812). }
+L53             ;       { Residential energy credits. Form 5695. }
+L54             ;       { Other credits. Forms 3800, 8801, etc. }
+
+{Other Taxes}
+L57             ;       { Self-employment tax. Sched SE }
+L58             ;       { Unreported social security and Medicare tax from Form 4137, 8919 }
+L59             ;       { Additional tax on IRAs, other qualified retirement plans, Form 5329 }
+L60a            ;       { Household employment taxes. Sched H }
+L60b            ;       { First-time homebuyer credit repayment. Form 5405. }
+L61             ;       { Health care: individual responsibility. }
+L62		;	{ Taxes from Forms 8959, 8960, others. }
+
+{Payments}
+L64      1165.50        {Federal income tax witheld, from W-2's, box-2 }
+         2988.09         { Spouse's}
+                ;
+L65             ;       { 2014 estimated payments + amnt applied from 2013 }
+L66a            ;       { Earned income credit (EIC) }
+L67             ;       { Additional child tax credit. Attach Form 8812 }
+L68		;	{ American opportunity credit. Form 8863, line 8. }
+L69		;	{ Net premium tax credit. Form 8962. }
+L70             ;       { Amnt paid in filing extension req. }
+L71             ;       { Excess soc. sec. + tier1 RRTA tax withheld}
+L72             ;       { Credits for federal tax on fuels. Attach form 4136}
+L73             ;       { Credits from Form 2439, 4136, 6801, 8885 }

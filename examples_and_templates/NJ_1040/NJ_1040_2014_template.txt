@@ -1,0 +1,54 @@
+Title:  NJ-1040 State 2014 Tax Form
+
+{ -- Initial Template -- Common 0 amounts filled-in as 0's, }
+{     Important ???-amounts must be filled-in by most everyone. }
+
+Status      Single      { Single, Married/joint, Married/separate, Head_of_household }
+L6          1           { Exemptions, self=1, self+spouse=2.}
+L7          0           { Over 65, self or spouse=1, both=2.}
+L8          0           { Blind ? self or spouse=1, both=2.}
+L9          0           { Number of qualified dependent children. }
+L10         0           { Number of other dependents. }
+L11         0           { Dependents attending college. }
+
+L14        ???          { Wages (W-2 Box-16) }
+                ;
+L15a        0           { Interest }
+                ;               
+L16         0           { Dividends }
+                ;
+L17         0   ;       { Business profits, (Fed Sched C). }
+L18                     { Capital Gains -- (No dates needed) }
+			 { (Enter buy cost as negative (-), sell price as positive (+)}
+                ;	 { No dates needed. }
+L19         0   ;       { Pensions, Annuities, and IRA Withdrawals (pg 20). }
+L20         0   ;       { Partnership income. (See pg 24.) }
+L21         0   ;       { S Corporation income. (See pg 24.) }
+L22         0   ;       { Rent, royalty, patents income. (Sched NJ-BUS-1, Part IV, Line 4.) }
+L23         0   ;       { Gambling winnings. }
+L24         0   ;       { Alimony and maintenance payments Received. }
+L25         0   ;       { Other (See pg 24). }
+L27a        0   ;       { Pension Exclusion (See pg 26). }
+L27b        0   ;       { Other Retirement Income Exclusion (See worksheet pg 26). }
+E1		;	{ Sched E - Medical Expenses (pg 27). For L30 calculation. }
+E4		;	{  Qualified Archer MSA contribs from Fed form 8853.}
+E5		;	{  Self-employed health insurance deduction. }
+L31         0   ;       { Alimony and maintenance payments Payed. }
+L32         0   ;       { Qualified Conservation Contribution. }
+L33         0   ;       { Health Enterprise Zone Deduction. }
+L34         0   ;       { Alternative Business Calc Adj (Sched NJ-BUS-2, Line 11) }
+
+L37a	    0   ;       { Property Tax Paid }
+A1          0   ;       { Income basis for any Out of State taxes paid. }
+A9a         0   ;       { Out of state taxes paid (ex. City income tax), if any. }
+
+L43	    0   ;	{ Sheltered Workshop Tax Credit. }
+L45	    0   ;	{ Use Tax Due on Out-of-State Purchases (pg 35). }
+L46	    0   ;	{ Penalty for underpayment of estimated tax. }
+L48        ???          { Witheld tax, from W-2's, Box 17 }
+                ;
+L50        0    ;       { NJ Estimated Tax Payments/Credit from last year's return. }
+L51        0    ;       { NJ Earned Income Tax Credit. (See Sched pg 38.) }
+L52        0    ;       { Excess NJ UI/HC/WD Withheld, (See pg 38.) }
+L53        0    ;       { Excess NJ Disability Insurance Withheld, (See pg 38.) }
+L54        0    ;       { Excess NJ Family Leave Insurance Withheld, (See pg 38.) }
