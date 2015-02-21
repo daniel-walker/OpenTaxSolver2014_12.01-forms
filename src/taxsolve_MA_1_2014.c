@@ -45,6 +45,13 @@ float thisversion=12.0;
 #define Yes 1
 #define No  0
 
+double SumL( Lmap &v, int start_slot, int end_slot )
+{
+ int j;
+ double result = 0.0;
+ for (j=start_slot; j <= end_slot; j++) result += v[j];
+ return result;
+}
 
 double Sum( double *v, int start_slot, int end_slot )
 {
@@ -238,7 +245,7 @@ int main( int argc, char *argv[] )
  GetLine( "L9", &L[9] );	/* Other Income, Alimony received. */
  ShowLineNonZero(9);
 
- L[10] = Sum( L, 3, 9 );
+ L[10] = SumL( L, 3, 9 );
  showline_wmsg( 10, "TOTAL 5.2% INCOME" );
  
  /* Amount paid to SS, Medicare, RR, US, or Mass retirement */
@@ -278,7 +285,7 @@ int main( int argc, char *argv[] )
  GetLine( "L15", &L[15] );	/* Other Deductions (sched Y, L17) */
  ShowLineNonZero(15);
 
- L[16] = Sum( L, 11, 15 );
+ L[16] = SumL( L, 11, 15 );
  showline_wmsg(16,"Total Deductions");
 
  L[17] = NotLessThanZero( L[10] - L[16] );
@@ -317,7 +324,7 @@ int main( int argc, char *argv[] )
  GetLine( "L26", &L[26] ); 	/* Additional tax on installment sale */
  ShowLineNonZero(26);
 
- L[28] = Sum( L, 22, 26 );
+ L[28] = SumL( L, 22, 26 );
 
  { /* AGI Worksheet pg 12+13. */
    double ws[20], threshA, threshB;
@@ -396,7 +403,7 @@ int main( int argc, char *argv[] )
   fprintf(outfile,"L34. Health Care penalty:  a. You: %6.2f,  b. Spouse: %6.2f,  L34 = %6.2f\n",
 	L34a, L34b, L[34] );
 
- L[35] = Sum( L, 31, 34 );
+ L[35] = SumL( L, 31, 34 );
  showline_wmsg(35,"Income Tax After Credits Contributions, Use Tax + HC Penalty");
 
  
@@ -425,7 +432,7 @@ int main( int argc, char *argv[] )
  GetLine( "L42", &L[42] );	/* Refundable credits, Sched RF, line 4. */
  ShowLineNonZero(42);
 
- L[43] = Sum( L, 36, 42 );
+ L[43] = SumL( L, 36, 42 );
  showline_wmsg(43,"total payments");
 
  /* Refund or Owe section. */

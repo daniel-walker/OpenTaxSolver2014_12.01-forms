@@ -30,10 +30,26 @@
 #include <string.h>
 #include <strings.h>
 #include <stdlib.h>
+#include <stdlib.h>
+
+#include <map>
+#include <string>
+
+
+class Lmap : public std::map<std::string, double>
+{
+	public:
+		double &operator [](const int &key) {
+			return std::map<std::string, double>::operator[](std::to_string(key));
+		}
+		double &operator [](const std::string &key) {
+			return std::map<std::string, double>::operator[](key);
+		}
+};
+
+Lmap L;
 
 #define MAX_LINES 1000
-
-double L[MAX_LINES];	/* Declare the Line entry variables. */
 
 FILE *infile=0,	 /* Main input file to be used for reading tax input data. */
      *outfile=0; /* Main output file. */

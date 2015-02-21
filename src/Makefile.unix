@@ -1,7 +1,7 @@
 
 CC      =  c++
 CFLAGS  =
-COPTIM  = -O -Wall
+COPTIM  = -O -Wall -std=c++0x
 
 
 SRC     = taxsolve_routines.c

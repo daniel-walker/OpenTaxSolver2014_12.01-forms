@@ -1519,6 +1519,7 @@ int main( int argc, char *argv[] )						/* Not Yet Updated for 2014. */
  GetLine( "L60b", &L60b );	/* First-time homebuyer credit repayment. Form 5405. */
  if (L60b != 0.0) fprintf(outfile, "L60b = %6.2f\n", L60b );
  L[60] = L[60] + L60b;
+ L["60b"] = L60b;
 
  GetLine( "L61", &L[61] );	/* Health care: individual responsibility. */
  ShowLineNonZero(61);
