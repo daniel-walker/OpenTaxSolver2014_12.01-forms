@@ -13,3 +13,7 @@ Compile:
 
 Run:
   bin/taxsolve_VA760_2014   VA760_2014.txt
+
+To download the pdf forms and fill them out run the following,
+  ../../bin/fill_form_VA_760_2014 VA760_2014_out.txt 
+

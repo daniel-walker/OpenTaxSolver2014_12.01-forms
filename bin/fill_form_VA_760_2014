@@ -1,0 +1,9 @@
+#!/bin/bash
+
+source $(dirname "$0")/fill_form_routine.sh
+
+fill_form $fill\_va760.xfdf 7602014_1.pdf $fill\_va760.pdf \
+"MD5 (7602014_1.pdf) = 18995514aebc2442f8266a5f31a5f04a" \
+"The VA 760 has changed. Please report to dwalker@fifo99.com." \
+"http://www.tax.virginia.gov/sites/tax.virginia.gov/files/taxforms/income-tax/2014/7602014_1.pdf";
+

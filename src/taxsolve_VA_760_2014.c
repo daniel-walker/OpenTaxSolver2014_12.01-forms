@@ -28,7 +28,7 @@
 #include <time.h>
 
 #include "taxsolve_routines.c"
-
+#include "taxsolve_VA_760_2014_forms.h"
 float thisversion=12.0;
 
 #define SINGLE 		        1
@@ -52,7 +52,7 @@ double TaxRateFunction( double x, int status )
 int main( int argc, char *argv[] )
 {
  int i, j, k;
- char word[1000], outfname[4000];
+ char word[1000], outfname[4000], va760_xfdf_outfname[4000];
  int status=0, exemptionsA=0, exemptionsB=0;
  time_t now;
  double L20b=0.0, std_ded=0.0, min2file;
@@ -71,9 +71,16 @@ int main( int argc, char *argv[] )
     k = 2;
     /* Base name of output file on input file. */
     strcpy(outfname,argv[i]);
+    strcpy(va760_xfdf_outfname,argv[i]);
     j = strlen(outfname)-1;
     while ((j>=0) && (outfname[j]!='.')) j--;
-    if (j<0) strcat(outfname,"_out.txt"); else strcpy(&(outfname[j]),"_out.txt");
+    if (j<0) {
+     strcat(outfname,"_out.txt");
+     strcat(outfname,"_va760.xfdf");
+    } else {
+     strcpy(&(outfname[j]),"_out.txt");
+     strcpy(&(va760_xfdf_outfname[j]),"_va760.xfdf");
+    }
     outfile = fopen(outfname,"w");
     if (outfile==0) {printf("ERROR: Output file '%s' could not be opened.\n", outfname); exit(1);}
     printf("Writing results to file:  %s\n", outfname);
@@ -105,10 +112,10 @@ int main( int argc, char *argv[] )
  /* get_parameter(infile, kind, x, emssg ) */
  get_parameter( infile, 's', word, "Status" );
  get_parameter( infile, 'l', word, "Status ?");
- if (strncasecmp(word,"Single",4)==0) status = SINGLE; else
- if (strncasecmp(word,"Married/Joint",13)==0) status = MARRIED_FILLING_JOINTLY; else
- if (strncasecmp(word,"Married/Sep",11)==0) status = MARRIED_FILLING_SEPARAT; else
- if (strncasecmp(word,"Head_of_House",4)==0) status = HEAD_OF_HOUSEHOLD;
+ if (strncasecmp(word,"Single",4)==0) { status = SINGLE; L["status"] = 1; } else
+ if (strncasecmp(word,"Married/Joint",13)==0) { status = MARRIED_FILLING_JOINTLY; L["status"] = 2;} else
+ if (strncasecmp(word,"Married/Sep",11)==0) { status = MARRIED_FILLING_SEPARAT; L["status"] = 3; } else
+ if (strncasecmp(word,"Head_of_House",4)==0) { status = HEAD_OF_HOUSEHOLD; L["status"] = 1; L["HOH"] = 1; }
  else
   { 
    printf("Error: unrecognized status '%s'. Must be: Single, Married/joint, Married/sep, Head_of_house, Widow(er)\nExiting.\n", word); 
@@ -120,10 +127,12 @@ int main( int argc, char *argv[] )
  get_parameter( infile, 's', word, "Exemptions_A" );	/* Exemptions_A: self/spouse, dependents. */
  get_parameters( infile, 'i', &exemptionsA, "Exemptions_A"); 
  fprintf(outfile,"Exemptions = %d\n", exemptionsA );
+ L["exemptionsA"] = exemptionsA;
 
  get_parameter( infile, 's', word, "Exemptions_B" );	/* Exemptions_B: Over 65, Blind for self/spouse  */
  get_parameters( infile, 'i', &exemptionsB, "Exemptions_B"); 
  fprintf(outfile,"Exemptions = %d\n", exemptionsB );
+ L["exemptionsB"] = exemptionsB;
 
  GetLineF( "L1", &L[1] );	/* Federal Adjusted Gross Income */
 
@@ -164,8 +173,10 @@ int main( int argc, char *argv[] )
  L[12] = L[10] - L[11];
  if (L[12] < std_ded) L[12] = std_ded;
  showline(12);
+ L["x930"] = L["exemptionsA"] * 930.0;
+ L["x800"] = L["exemptionsB"] * 800.0;
 
- L[13] = 930.0 * exemptionsA + 800.0 * exemptionsB;
+ L[13] = L["x930"] + L["x800"];
  showline(13);
   
  GetLineF( "L14", &L[14] );	/* Deductions from Virginia Adjusted Gross Income Schedule ADJ, Line 9. */
@@ -187,6 +198,7 @@ int main( int argc, char *argv[] )
 
  GetLineF( "L20a", &L[20] );	/* Virginia tax withheld for 2014. */
  GetLineF( "L20b", &L20b );	/* Spouse's Virginia tax withheld. */
+ L["20b"] = L20b;
 
  GetLineF( "L21", &L[21] );	/* Estimated tax paid for 2014. (form 760ES) */
 
@@ -262,6 +274,11 @@ int main( int argc, char *argv[] )
 
  fclose(infile);
  fclose(outfile);
+
+ outfile = fopen(va760_xfdf_outfname,"w");
+ output_xfdf_form_data(outfile, va760_2014, L); 
+ fclose(outfile);
+
  Display_File( outfname );
  printf("\nResults written to file:  %s\n", outfname);
  return 0;
