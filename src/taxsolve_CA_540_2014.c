@@ -33,6 +33,7 @@ float thisversion=12.0;
 #include <stdlib.h>
 
 #include "taxsolve_routines.c"
+#include "taxsolve_CA_540_2014_forms.h"
 
 #define SINGLE 		        1
 #define MARRIED_FILLING_JOINTLY 2
@@ -237,8 +238,9 @@ int ImportFederalReturnData( char *fedlogfile, struct FedReturnData *fed_data )
 int main( int argc, char *argv[] )
 {
  int argk, j, k, iline7, iline8, iline9, iline10;
- double min2file=0.0, sched540[MAX_LINES], threshA=0, std_ded=0;
- char word[4000], outfname[4000], prelim_1040_outfilename[5000];
+ double min2file=0.0, threshA=0, std_ded=0;
+ Lmap sched540;
+ char word[4000], outfname[4000], prelim_1040_outfilename[5000], ca540_xfdf[1000], ca_schedule_540_xfdf[1000];
  time_t now;
 
  /* Decode any command-line arguments. */
@@ -254,9 +256,19 @@ int main( int argc, char *argv[] )
     k = 2;
     /* Base name of output file on input file. */
     strcpy(outfname,argv[argk]);
+    strcpy(ca540_xfdf,argv[argk]);
+    strcpy(ca_schedule_540_xfdf,argv[argk]);
     j = strlen(outfname)-1;
     while ((j>=0) && (outfname[j]!='.')) j--;
-    if (j<0) strcat(outfname,"_out.txt"); else strcpy(&(outfname[j]),"_out.txt");
+    if (j<0) {
+     strcat(outfname,"_out.txt");
+     strcat(ca540_xfdf,"_ca540.xfdf");
+     strcat(ca_schedule_540_xfdf,"_540ca.xfdf");
+    } else {
+     strcpy(&(outfname[j]),"_out.txt");
+     strcpy(&(ca540_xfdf[j]),"_ca540.xfdf");
+     strcpy(&(ca_schedule_540_xfdf[j]),"_540ca.xfdf");
+    }
     outfile = fopen(outfname,"w");
     if (outfile==0) {printf("ERROR: Output file '%s' could not be opened.\n", outfname); exit(1);}
     printf("Writing results to file:  %s\n", outfname);
@@ -307,11 +319,11 @@ int main( int argc, char *argv[] )
  //  }
  switch (status)
  {
-  case SINGLE: 			fprintf(outfile,"Status = Single (%d)\n", status); break;
-  case MARRIED_FILLING_JOINTLY: fprintf(outfile,"Status = Married/Joint (%d)\n", status); break;
-  case MARRIED_FILLING_SEPARAT: fprintf(outfile,"Status = Married/Sep (%d)\n", status); break;
-  case HEAD_OF_HOUSEHOLD: 	fprintf(outfile,"Status = Head_of_Household (%d)\n", status); break;
-  case WIDOW: 		  	fprintf(outfile,"Status = Widow(er) (%d)\n", status); break;
+  case SINGLE: 			fprintf(outfile,"Status = Single (%d)\n", status); L["Single"] = 1; break;
+  case MARRIED_FILLING_JOINTLY: fprintf(outfile,"Status = Married/Joint (%d)\n", status); L["MFJ"] = 1; break;
+  case MARRIED_FILLING_SEPARAT: fprintf(outfile,"Status = Married/Sep (%d)\n", status); L["MFS"] = 1; break;
+  case HEAD_OF_HOUSEHOLD: 	fprintf(outfile,"Status = Head_of_Household (%d)\n", status); L["HOH"] = 1; break;
+  case WIDOW: 		  	fprintf(outfile,"Status = Widow(er) (%d)\n", status); L["QW"] = 1; break;
  }
  fprintf(outfile,"\nStep-2 fill-in box %d\n", status );
 
@@ -325,21 +337,25 @@ int main( int argc, char *argv[] )
   iline7 = 1;  else  iline7 = 2;
  if (L[6] != 0.0) iline7 = 0; /* <-- Possible exceptions here. */
  L[7] = 108.0 * iline7;
+ L["7m"] = iline7;
  showline(7);
 
  get_parameter( infile, 's', word, "L8" );	/* Blind?, 1 if you or spouse, 2 if both. */
  get_parameter( infile, 'i', &iline8, "L8" );
  L[8] = iline8 * 108.0;
+ L["8m"] = iline8;
  showline(8);
 
  get_parameter( infile, 's', word, "L9" );	/* Senior?, 1 if you or spouse, 2 if both. */
  get_parameter( infile, 'i', &iline9, "L9" );
  L[9] = iline9 * 108.0;
+ L["9m"] = iline9;
  showline(9);
 
  get_parameter( infile, 's', word, "L10" );  /* Number of Dependents. */
  get_parameter( infile, 'i', &iline10, "L10"); 
  L[10] = iline10 * 333.0;
+ L["10m"] = iline10;
  showline(10);
 
  L[11] = L[7] + L[8] + L[9] + L[10];
@@ -482,10 +498,13 @@ int main( int argc, char *argv[] )
  showline_wmsg(19,"Taxable Income");		/* Taxable income. */
 
  /* Tax. */
- if (L[19] < 100000.00)
+ if (L[19] < 100000.00) {
   fprintf(outfile,"Fill in circle from: Tax Table.\n");
- else
+  L["TT"] = 1;
+ } else {
   fprintf(outfile,"Fill in circle from: Tax Rate Schedule.\n");
+  L["TRS"] = 1;
+ }
  L[31] = TaxRateFunction( L[19], status );
  showline( 31 );
 
@@ -594,6 +613,15 @@ int main( int argc, char *argv[] )
 
  fclose(infile);
  fclose(outfile);
+
+ outfile = fopen(ca540_xfdf,"w");
+ output_xfdf_form_data(outfile, ca540_2014, L); 
+ fclose(outfile);
+
+ outfile = fopen(ca_schedule_540_xfdf,"w");
+ output_xfdf_form_data(outfile, ca_schedule_540_2014, sched540); 
+ fclose(outfile);
+
  Display_File( outfname );
  return 0;
 }
