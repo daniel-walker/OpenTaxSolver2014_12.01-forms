@@ -38,6 +38,8 @@ float thisversion=12.00;
 #include <stdlib.h>
 
 #include "taxsolve_routines.c"
+#include "taxsolve_US_1040_Sched_C_2014_forms.h"
+
 #define Yes 1
 
 /*----------------------------------------------------------------------------*/
@@ -45,7 +47,7 @@ float thisversion=12.00;
 int main ( int argc, char *argv[] )
 {
  int i, j, k;
- char word[2000], outfname[1000];
+ char word[2000], outfname[1000], f1040sc_xfdf_outfname[1000];
  time_t now;
  double L16b=0.0, L20b=0.0, L24b=0.0, Mileage=0.0;
  int L32;
@@ -65,9 +67,16 @@ int main ( int argc, char *argv[] )
     k = 2;
     /* Base name of output file on input file. */
     strcpy(outfname,argv[i]);
+    strcpy(f1040sc_xfdf_outfname,argv[i]);
     j = strlen(outfname)-1;
     while ((j>=0) && (outfname[j]!='.')) j--;
-    if (j<0) strcat(outfname,"_out.txt"); else strcpy(&(outfname[j]),"_out.txt");
+    if (j<0) {
+     strcat(outfname,"_out.txt");
+     strcat(f1040sc_xfdf_outfname,"_f1040sc.xfdf");
+    } else {
+     strcpy(&(outfname[j]),"_out.txt");
+     strcpy(&(f1040sc_xfdf_outfname[j]),"_f1040sc.xfdf");
+    }
     outfile = fopen(outfname,"w");
     if (outfile==0) {printf("ERROR: Output file '%s' could not be opened.\n", outfname); exit(1);}
     printf("Writing results to file:  %s\n", outfname);
@@ -125,7 +134,7 @@ int main ( int argc, char *argv[] )
  GetLine( "L16a", &L[16] );	/* Interest (mortgage paid to banks) */
 
  GetLine( "L16b", &L16b );	/* Interest (Other) */
-
+ L["16b"] = L16b;
  GetLine( "L17", &L[17] );	/* Legal & professional services */
 
  GetLine( "L18", &L[18] );	/* Office expense */
@@ -135,6 +144,7 @@ int main ( int argc, char *argv[] )
  GetLine( "L20a", &L[20] );	/* Vehicles and equiment Rent or Lease */
 
  GetLine( "L20b", &L20b );	/* Rent or lease Other business property */
+ L["20b"] = L20b;
 
  GetLine( "L21", &L[21] );	/* Repairs & maintenance */
 
@@ -145,6 +155,7 @@ int main ( int argc, char *argv[] )
  GetLine( "L24a", &L[24] );	/* Travel */
 
  GetLine( "L24b", &L24b );	/* Deductable Meals & entertainment */
+ L["24b"] = L24b;
 
  GetLine( "L25", &L[25] );	/* Utilities */
 
@@ -229,6 +240,7 @@ int main ( int argc, char *argv[] )
    // fprintf(outfile,"Mark box 32a accordingly\n");
    if (L32 == Yes)
     {
+     L["32a"] = 1;
      fprintf(outfile,"If you checked 32a, enter %2.2f on Form 1040 line 12.\n", L[31]);
      fprintf(outfile,"        Estates and trusts, enter on Form 1041, line 3.\n");
     }
@@ -245,6 +257,10 @@ int main ( int argc, char *argv[] )
  showline(41);
  showline_wmsg(42,"Cost of goods sold");
 
+ fclose(outfile);
+
+ outfile = fopen(f1040sc_xfdf_outfname,"w");
+ output_xfdf_form_data(outfile, f1040sc_2014, L); 
  fclose(outfile);
 
  printf("\nListing results from file: %s\n\n", outfname);

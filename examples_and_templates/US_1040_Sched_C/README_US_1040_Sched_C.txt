@@ -20,6 +20,8 @@ Compile:
 Run:
   ./taxsolve_US1040_Sched_C  Sched_C.txt
 
+To download the pdf forms and fill them out run the following,
+  ../../bin/fill_form_US_1040_Sched_C Sched_C_out.txt 
 
 For updates and further information, see:
         http://sourceforge.net/projects/opentaxsolver/
