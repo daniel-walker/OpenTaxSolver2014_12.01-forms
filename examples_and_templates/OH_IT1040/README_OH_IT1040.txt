@@ -16,3 +16,7 @@ Run:
 
  Or, from this directory:
    ../../bin/taxsolve_OH_IT1040_2014  OH1040_2014.txt
+
+To download the pdf forms and fill them out run the following,
+  ../../bin/fill_form_OH_IT1040_2014 OH1040_2014_out.txt 
+

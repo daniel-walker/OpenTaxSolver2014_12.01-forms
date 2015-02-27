@@ -500,6 +500,7 @@ enum form_flags {
 	DOLLAR_ONLY,
 	USE_KEY_IN_FORM,
 	IF_SET,
+	FOUR_DIGITS,
 };
 
 struct xfdf_form_translation {
@@ -539,6 +540,12 @@ void output_xfdf_form_data(FILE *out, struct xfdf_form_translation *form, Lmap &
 			if (form[i].flags == DOLLAR_AND_CENTS_ONE) {
 				fprintf(out,"\t\t<field name=\"%s\">\n", form[i].pdf_line_dollar);
 				fprintf(out,"\t\t\t<value>%.2f</value>\n", lines[form[i].line]);
+				fprintf(out,"\t\t</field>\n");
+			}
+
+			if (form[i].flags == FOUR_DIGITS) {
+				fprintf(out,"\t\t<field name=\"%s\">\n", form[i].pdf_line_dollar);
+				fprintf(out,"\t\t\t<value>%4.f</value>\n", lines[form[i].line]*10000.0);
 				fprintf(out,"\t\t</field>\n");
 			}
 		}

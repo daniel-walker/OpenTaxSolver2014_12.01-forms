@@ -28,6 +28,7 @@
 #include <time.h>
 
 #include "taxsolve_routines.c"
+#include "taxsolve_OH_IT1040_2014_forms.h"
 
 double thisversion=12.0;
 
@@ -56,7 +57,7 @@ double TaxRateFunction( double x, int status )
 int main( int argc, char *argv[] )
 {
  int i, j, k;
- char word[1000], outfname[1000];
+ char word[1000], outfname[1000], it1040_xfdf_outfname[1000];
  int status=0, exemptions=0, qualify_jfc=0;
  time_t now;
  double factor62, factor67, limit;
@@ -82,9 +83,16 @@ int main( int argc, char *argv[] )
     k = 2;
     /* Base name of output file on input file. */
     strcpy(outfname,argv[i]);
+    strcpy(it1040_xfdf_outfname,argv[i]);
     j = strlen(outfname)-1;
     while ((j>=0) && (outfname[j]!='.')) j--;
-    if (j<0) strcat(outfname,"_out.txt"); else strcpy(&(outfname[j]),"_out.txt");
+    if (j<0) {
+     strcat(outfname,"_out.txt");
+     strcat(it1040_xfdf_outfname,"_it1040.xfdf");
+    } else {
+     strcpy(&(outfname[j]),"_out.txt");
+     strcpy(&(it1040_xfdf_outfname[j]),"_it1040.xfdf");
+    }
     outfile = fopen(outfname,"w");
     if (outfile==0) {printf("ERROR: Output file '%s' could not be opened.\n", outfname); exit(1);}
     printf("Writing results to file:  %s\n", outfname);
@@ -115,10 +123,10 @@ int main( int argc, char *argv[] )
  /* get_parameter(infile, kind, x, emssg ) */
  get_parameter( infile, 's', word, "Status" );
  get_parameter( infile, 'l', word, "Status ?");
- if (strncasecmp(word,"Single",4)==0) status = SINGLE; else
- if (strncasecmp(word,"Married/Joint",11)==0) status = MARRIED_FILLING_JOINTLY; else
- if (strncasecmp(word,"Married/Sep",11)==0) status = MARRIED_FILLING_SEPARAT; else
- if (strncasecmp(word,"Head_of_House",4)==0) status = HEAD_OF_HOUSEHOLD;
+ if (strncasecmp(word,"Single",4)==0) { status = SINGLE; L["Single"] = 1; } else
+ if (strncasecmp(word,"Married/Joint",11)==0) { status = MARRIED_FILLING_JOINTLY; L["MFJ"] = 1; }else
+ if (strncasecmp(word,"Married/Sep",11)==0) { status = MARRIED_FILLING_SEPARAT; L["MFS"] = 1; }else
+ if (strncasecmp(word,"Head_of_House",4)==0) { status = HEAD_OF_HOUSEHOLD; L["HOH"] = 1; }
  else
   { 
    printf("Error: unrecognized status '%s'. Must be: Single, Married/joint, Married/sep, Head_of_house.\nExiting.\n", word); 
@@ -149,36 +157,55 @@ int main( int argc, char *argv[] )
  GetLine( "L34", &L[34] );	/* Pass-through Entity addback. */
 
  GetLine( "L35a", &L35a );	/* Fed int+div subject to state tax & misc. fed adj. */
+ L["35a"] = L35a;
  GetLine( "L35b", &L35b );	/* Reimbursed college tuit. fees deducted prev yrs. */
+ L["35b"] = L35b;
  GetLine( "L35c", &L35c );	/* Losses, sale of Ohio Public Obligations. */
+ L["35c"] = L35c;
  GetLine( "L35d", &L35d );	/* Nonmedical withdrawals OH Med. Savings Acct. */
+ L["35d"] = L35d;
  GetLine( "L35e", &L35e );	/* Reimb. exp. prev. deducted, if reimb. not in FAGI .*/
+ L["35e"] = L35e;
  GetLine( "L35f", &L35f );	/* Lump sum distribution add-back + misc. fed income tax adjustments */
+ L["35f"] = L35f;
  GetLine( "L35g", &L35g );	/* Adjustment for IRC section 168(k) and 179 depreciation expense */
+ L["35g"] = L35g;
  L[35] = L35a + L35b + L35c + L35d + L35e + L35f + L35g;
 
  /* Deductions - see limitations in instructions. */
  GetLine( "L37a", &L37a );	/* Fed int + div exempt from state taxation. */
+ L["37a"] = L37a;
  GetLine( "L37b", &L37b );	/* Adjustment for Internal Revenue Code sections 168(k) + 179 deprec. expense */
+ L["37b"] = L37b;
  L[37] = L37a + L37b;
  GetLine( "L38", &L[38] );	/* Employee compensation earned in OH by non-residents. */
  GetLine( "L39a", &L39a );	/* Military pay. */
+ L["39a"] = L39a;
  GetLine( "L39b", &L39b );	/* Military Retirement Income. */
+ L["39b"] = L39b;
  L[39] = L39a + L39b;
  GetLine( "L40a", &L40a );	/* State/municipal income tax overpayments. */
+ L["40a"] = L40a;
  GetLine( "L40b", &L40b );	/* Refund or reimbursements shown on IRS form 1040, line 21 */
+ L["40b"] = L40b;
  GetLine( "L40c", &L40c );	/* Repayment of income reported in a prior year, ... */
+ L["40c"] = L40c;
  L[40] = L40a + L40b + L40c;
  GetLine( "L41", &L[41] );	/* Small business investor income deduction */
  GetLine( "L42", &L[42] );	/* Disab. & survivor benef. */
  GetLine( "L43", &L[43] );	/* Qualifying soc. sec. + railroad benefits. */ 
  GetLine( "L44a", &L44a );	/* Education: Ohio 529 contributions */ 
+ L["44a"] = L40a;
  GetLine( "L44b", &L44b );	/* Education: Ohio 529 contributions */ 
+ L["44b"] = L40b;
  L[44] = L44a + L44b;
  GetLine( "L45", &L[45] );	/* Ohio National Guard reimbursements */
  GetLine( "L46a", &L46a );	/* Unreimbursed health insurance ... */
+ L["46a"] = L40a;
  GetLine( "L46b", &L46b );	/* Funds deposited into, and earnings of, a medical savings account */
+ L["46b"] = L40b;
  GetLine( "L46c", &L46c );	/* Qualified organ donor expenses */
+ L["46c"] = L40c;
  L[46] = L46a + L46b + L46c;
  GetLine( "L47", &L[47] );	/* Wage expense not deducted */
  GetLine( "L48", &L[48] );	/* Interest income from Ohio Public Obligations ... */
@@ -213,10 +240,15 @@ int main( int argc, char *argv[] )
  GetLine( "L68", &L[68] );	/* Nonrefundable Business Credits, Sched-E line 10 */
 
  GetLine( "L72a", &L72a );	/* Refundable Business Jobs Credits, */
+ L[72] = L72a;
  GetLine( "L72b", &L72b );	/* Refundable Pass-through Entity Credits, */
+ L["72b"] = L72b;
  GetLine( "L72c", &L72c );	/* Refundable Histroic Preservation Credits, */
+ L["72c"] = L72c;
  GetLine( "L72d", &L72d );	/* Refundable Motion Picture Credits */
+ L["72d"] = L72d;
  GetLine( "L72e", &L72e );	/* Financial Institutions Tax (FIT) credit */
+ L["72e"] = L72e;
  L[73] = L72a + L72b + L72c + L72d + L72e;
  L[23] = L[73];
 
@@ -268,6 +300,7 @@ int main( int argc, char *argv[] )
     if (L[5] < 75000) jfc = 0.10;
     else jfc = 0.05;
     L[11] = smallerof( jfc * L[10], 650.0 );
+    L["11p"] = jfc*100.0;
   } /*Joint_Filing_Credit*/
 
  L[12] = L[10] - L[11];
@@ -276,12 +309,14 @@ int main( int argc, char *argv[] )
 
  L[61] = L[3];
  factor62 = 0.0001 * (int)(10000.0 * (L[60] / L[61]));	/* 4-digits right of decimal-pt. */
+ L["62p"] = factor62;
  L[62] = factor62 * L[12];
  L[64] = smallerof( L[62], L[63] );
  L[69] = L[64];
 
  L[66] = L[3];
  factor67 = 0.0001 * (int)(10000.0 * (L[65] / L[66]));  /* 4-digits right of decimal-pt. */
+ L["67p"] = factor67;
  L[67] = factor67 * L[12];
  L[70] = L[67];
 
@@ -374,6 +409,11 @@ int main( int argc, char *argv[] )
 
  fclose(infile);
  fclose(outfile);
+
+ outfile = fopen(it1040_xfdf_outfname,"w");
+ output_xfdf_form_data(outfile, it1040_2014, L); 
+ fclose(outfile);
+
  Display_File( outfname );
  printf("\nResults written to file:  %s\n", outfname);
  return 0;
