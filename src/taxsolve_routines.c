@@ -494,4 +494,71 @@ void get_comment( FILE *infile, char *word )
  if (verbose) printf("Read Coment: {%s}\n", word);
 }
 
+enum form_flags {
+	DOLLAR_AND_CENTS,
+	DOLLAR_AND_CENTS_ONE,
+	DOLLAR_ONLY,
+	USE_KEY_IN_FORM,
+	IF_SET,
+};
+
+struct xfdf_form_translation {
+	const char *line;
+	enum form_flags flags;
+	const char *pdf_line_dollar;
+	const char *pdf_line_cents;
+};
+
+void output_xfdf_form_data(FILE *out, struct xfdf_form_translation *form, Lmap &lines)
+{
+	int i=0;
+
+	fprintf(out, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+	fprintf(out, "<xfdf xmlns=\"http://ns.adobe.com/xfdf/\">\n");
+	fprintf(out, "\t<fields>\n");
+
+	while (form[i].line != NULL) {
+		double dollar = 0.0, cents = 0.0;
+
+		if (lines.count(form[i].line) == 1) {
+
+			if (form[i].flags == DOLLAR_ONLY || form[i].flags == DOLLAR_AND_CENTS) {
+				dollar = (int)lines[form[i].line];
+				fprintf(out,"\t\t<field name=\"%s\">\n", form[i].pdf_line_dollar);
+				fprintf(out,"\t\t\t<value>%.f</value>\n", dollar);
+				fprintf(out,"\t\t</field>\n");
+			}
+
+			if (form[i].flags == DOLLAR_AND_CENTS) {
+				cents = (lines[form[i].line]*100.0 - (int)dollar*100.0);
+				fprintf(out,"\t\t<field name=\"%s\">\n", form[i].pdf_line_cents);
+				fprintf(out,"\t\t\t<value>%02.f</value>\n", cents);
+				fprintf(out,"\t\t</field>\n");
+			}
+
+			if (form[i].flags == DOLLAR_AND_CENTS_ONE) {
+				fprintf(out,"\t\t<field name=\"%s\">\n", form[i].pdf_line_dollar);
+				fprintf(out,"\t\t\t<value>%.2f</value>\n", lines[form[i].line]);
+				fprintf(out,"\t\t</field>\n");
+			}
+		}
+
+		if (form[i].flags == USE_KEY_IN_FORM && lines.count(form[i].line) == 1) {
+			fprintf(out,"\t\t<field name=\"%s\">\n", form[i].pdf_line_dollar);
+			fprintf(out,"\t\t\t<value>%s</value>\n", form[i].line);
+			fprintf(out,"\t\t</field>\n");
+		}
+
+		if (form[i].flags == IF_SET && lines.count(form[i].line) == 1) {
+			fprintf(out,"\t\t<field name=\"%s\">\n", form[i].pdf_line_dollar);
+			fprintf(out,"\t\t\t<value>%s</value>\n", form[i].pdf_line_cents);
+			fprintf(out,"\t\t</field>\n");
+		}
+
+		i++;
+	}
+	fprintf(out, "\t</fields>\n");
+	fprintf(out, "</xfdf>");;
+
+}
 

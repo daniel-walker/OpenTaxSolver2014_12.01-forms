@@ -37,6 +37,7 @@ float thisversion=12.01;
 #include <strings.h>
 #include <stdlib.h>
 #include "taxsolve_routines.c"
+#include "taxsolve_US_1040_2014_form.h"
 
 #define SINGLE 		        1
 #define MARRIED_FILLING_JOINTLY 2
@@ -46,10 +47,10 @@ float thisversion=12.01;
 #define Yes 1
 #define No  0
 
-double SchedA[MAX_LINES], SchedD[MAX_LINES];
+Lmap SchedA, SchedD;
 double L9b=0.0;			 /* Qualified dividends. */
 double qcgws6=0.0, qcgws7=0.0;	 /* Support for AMT calculation. (qual.div+cap.gain wrksht vals.)*/
-int Do_SchedD=No, Do_QDCGTW=No, Do_SDTW=No;
+int Do_SchedD=No, Do_QDCGTW=No, Do_SDTW=No, output_SchedD=No;
 int status, under65=Yes, over65=No, dependent=No;
 double  L60b=0.0, collectibles_gains=0.0, ws_sched_D[MAX_LINES], idws_thresh=0.0, idws[MAX_LINES];
 
@@ -694,17 +695,23 @@ void get_cap_gains( char *emssg	)							/* Updated for 2014. */
   {
    printf_capgain_list( short_trades, 1, "Form 8949 Part-I, Short-Term Cap Gains+Losses, CHECK (A) Basis Reported to IRS:" );
    SchedDd[1] = total_sales;
+   SchedD["1d"] = total_sales;
    SchedDe[1] = total_costs;
+   SchedD["1e"] = total_costs;
    SchedD[1] = SchedDd[1] + SchedDe[1];
    free_capgain_list( &short_trades );
+   output_SchedD=Yes;
   }
  if (long_trades)
   {
    printf_capgain_list( long_trades, 3, "Form 8949 Part-II, Long-Term Cap Gains+Losses, CHECK (A) Basis Reported to IRS:"  );
    SchedDd[8] = total_sales;
+   SchedD["8d"] = total_sales;
    SchedDe[8] = total_costs;
+   SchedD["8e"] = total_costs;
    SchedD[8] = SchedDd[8] + SchedDe[8];
    free_capgain_list( &long_trades );
+   output_SchedD=Yes;
   }
 
  get_gain_and_losses( "Cap-Gains-B" );	/* (B) Basis NOT Reported to IRS. */
@@ -712,17 +719,23 @@ void get_cap_gains( char *emssg	)							/* Updated for 2014. */
   {
    printf_capgain_list( short_trades, 1, "Form 8949 Part-I, Short-Term Cap Gains+Losses, CHECK (B) Basis NOT Reported to IRS:" );
    SchedDd[2] = total_sales;
+   SchedD["2d"] = total_sales;
    SchedDe[2] = total_costs;
+   SchedD["2e"] = total_costs;
    SchedD[2] = SchedDd[2] + SchedDe[2];
    free_capgain_list( &short_trades );
+   output_SchedD=Yes;
   }
  if (long_trades)
   {
    printf_capgain_list( long_trades, 3, "Form 8949 Part-II, Long-Term Cap Gains+Losses, CHECK (B) Basis NOT Reported to IRS:"  );
    SchedDd[9] = total_sales;
+   SchedD["9d"] = total_sales;
    SchedDe[9] = total_costs;
+   SchedD["9e"] = total_costs;
    SchedD[9] = SchedDd[9] + SchedDe[9];
    free_capgain_list( &long_trades );
+   output_SchedD=Yes;
   }
 
  get_gain_and_losses( "Cap-Gains-C" );	/* (C) Cannot check (A) or (B). */
@@ -730,17 +743,23 @@ void get_cap_gains( char *emssg	)							/* Updated for 2014. */
   {
    printf_capgain_list( short_trades, 1, "Form 8949 Part-I, Short-Term Cap Gains+Losses, CHECK (C) Not reported on Form 1099-B.\n" );
    SchedDd[3] = total_sales;
+   SchedD["3d"] = total_sales;
    SchedDe[3] = total_costs;
+   SchedD["3e"] = total_costs;
    SchedD[3] = SchedDd[3] + SchedDe[3];
    free_capgain_list( &short_trades );
+   output_SchedD=Yes;
   }
  if (long_trades)
   {
    printf_capgain_list( long_trades, 3, "Form 8949 Part-II, Long-Term Cap Gains+Losses, CHECK (C) Not reported on Form 1099-B.\n"  );
    SchedDd[10] = total_sales;
+   SchedD["10d"] = total_sales;
    SchedDe[10] = total_costs;
+   SchedD["10e"] = total_costs;
    SchedD[10] = SchedDd[10] + SchedDe[10];
    free_capgain_list( &long_trades );
+   output_SchedD=Yes;
   }
 
  stcg = SchedD[1] + SchedD[2] + SchedD[3];
@@ -818,6 +837,8 @@ void get_cap_gains( char *emssg	)							/* Updated for 2014. */
       { /* Lines 17-21 */
 	double wsd[50];
 
+	SchedD["17y"] = 1;
+
 	fprintf(outfile," D17 = yes\n");
 
 	/* '28% Rate Gain Worksheet' on instructions page D-12. */
@@ -837,12 +858,14 @@ void get_cap_gains( char *emssg	)							/* Updated for 2014. */
         if ((SchedD[18] == 0.0) && (SchedD[19] == 0.0))
 	 { /*yes*/
 	  fprintf(outfile," D20 = Yes\n");
+	  SchedD["20y"] = 1;
 	  // printf("Complete 'Qualified Dividends and Captial Gain tax Worksheet', instructions page 43.\n");
 	  Do_QDCGTW = Yes;
 	 } /*yes*/
 	else
 	 { /*no*/
 	  fprintf(outfile," D20 = No\n");
+	  SchedD["20n"] = 1;
 	  // printf("Complete 'Schedule D Tax Worksheet', instructions page D-15.\n");
 	  Do_SDTW = Yes;
 	  Do_QDCGTW = No;
@@ -852,6 +875,7 @@ void get_cap_gains( char *emssg	)							/* Updated for 2014. */
      else 
       {
        printf(" D17 = no\n");
+       SchedD["17n"] = 1;
        doline22 = Yes;
       }
     } /*gain*/  
@@ -877,12 +901,14 @@ void get_cap_gains( char *emssg	)							/* Updated for 2014. */
      if (L9b > 0.0)
       { /*yes*/
        fprintf(outfile," D22 = Yes\n");
+       SchedD["22y"] = 1;
        // printf("Complete 'Qualified Dividends and Captial Gain tax Worksheet', instructions page 34.\n");
        Do_QDCGTW = Yes;	
       } /*yes*/
      else
       { /*no*/
        fprintf(outfile," D22 = No\n");
+       SchedD["22n"] = 1;
        // Do_QDCGTW = No;	
       } /*no*/
     }
@@ -982,7 +1008,7 @@ void sched_D_tax_worksheet( int status, double L9b )				/* Updated for 2014. */
 int main( int argc, char *argv[] )						/* Not Yet Updated for 2014. */
 {
  int argk, j, k, itemize=0;
- char word[2000], outfname[1000];
+ char word[2000], outfname[1000], f1040_xfdf_outfname[1000], f1040sa_xfdf_outfname[1000], f1040sd_xfdf_outfname[1000];
  time_t now;
  double exemption_threshold=0.0, dedexws[20];
  double S_STD_DEDUC, MFS_STD_DEDUC, MFJ_STD_DEDUC, HH_STD_DEDUC;
@@ -1001,9 +1027,22 @@ int main( int argc, char *argv[] )						/* Not Yet Updated for 2014. */
     k = 2;
     /* Base name of output file on input file. */
     strcpy(outfname,argv[argk]);
+    strcpy(f1040_xfdf_outfname,argv[argk]);
+    strcpy(f1040sa_xfdf_outfname,argv[argk]);
+    strcpy(f1040sd_xfdf_outfname,argv[argk]);
     j = strlen(outfname)-1;
     while ((j>=0) && (outfname[j]!='.')) j--;
-    if (j<0) strcat(outfname,"_out.txt"); else strcpy(&(outfname[j]),"_out.txt");
+    if (j<0) {
+	strcat(outfname,"_out.txt");
+	strcat(f1040_xfdf_outfname,"_f1040.xfdf");
+	strcat(f1040sa_xfdf_outfname,"_f1040sa.xfdf");
+	strcat(f1040sd_xfdf_outfname,"_f1040sd.xfdf");
+	} else {
+	strcpy(&(outfname[j]),"_out.txt");
+	strcpy(&(f1040_xfdf_outfname[j]),"_f1040.xfdf");
+	strcpy(&(f1040sa_xfdf_outfname[j]),"_f1040sa.xfdf");
+	strcpy(&(f1040sd_xfdf_outfname[j]),"_f1040sd.xfdf");
+	}
     outfile = fopen(outfname,"w");
     if (outfile==0) {printf("ERROR: Output file '%s' could not be opened.\n", outfname); exit(1);}
     printf("Writing results to file:  %s\n", outfname);
@@ -1044,11 +1083,11 @@ int main( int argc, char *argv[] )						/* Not Yet Updated for 2014. */
  /* get_parameter(infile, kind, x, emssg ) */
  get_parameter( infile, 's', word, "Status" );	/* Single, Married/joint, Married/sep, Head house, Widow(er) */
  get_parameter( infile, 'l', word, "Status?");
- if (strncasecmp(word,"Single",4)==0) status = SINGLE; else
- if (strncasecmp(word,"Married/Joint",13)==0) status = MARRIED_FILLING_JOINTLY; else
- if (strncasecmp(word,"Married/Sep",11)==0) status = MARRIED_FILLING_SEPARAT; else
- if (strncasecmp(word,"Head_of_House",4)==0) status = HEAD_OF_HOUSEHOLD; else
- if (strncasecmp(word,"Widow",4)==0) status = WIDOW;
+ if (strncasecmp(word,"Single",4)==0) { status = SINGLE; L["S"] = 1; }else
+ if (strncasecmp(word,"Married/Joint",13)==0) {status = MARRIED_FILLING_JOINTLY; L["MJ"] = 1;} else
+ if (strncasecmp(word,"Married/Sep",11)==0) {status = MARRIED_FILLING_SEPARAT; L["MS"] = 1;} else
+ if (strncasecmp(word,"Head_of_House",4)==0) {status = HEAD_OF_HOUSEHOLD; L["HoH"] = 1;} else
+ if (strncasecmp(word,"Widow",4)==0) {status = WIDOW; L["QW"] = 1;}
  else
   { 
    printf("Error: unrecognized status '%s'. Exiting.\n", word); 
@@ -1077,6 +1116,7 @@ int main( int argc, char *argv[] )						/* Not Yet Updated for 2014. */
  GetLineF( "L8a", &L[8] );	/* Taxable interest. (Sched-B) */
  GetLineF( "L9", &L[9] );	/* Ordinary Dividends. (Sched-B) */
  GetLineF( "L9b", &L9b );	/* Qualified Dividends. (Sched-B) */
+ L["9b"] = L9b;
  if (L9b > 0.0) Do_QDCGTW = Yes;	
  if ((L[8] != 0.0) || (L[9] != 0.0))
   {
@@ -1586,6 +1626,22 @@ int main( int argc, char *argv[] )						/* Not Yet Updated for 2014. */
 
  fclose(infile);
  fclose(outfile);
+
+ outfile = fopen(f1040_xfdf_outfname,"w");
+ output_xfdf_form_data(outfile, form_us_1040_2014, L); 
+ fclose(outfile);
+
+ if (itemize) {
+  outfile = fopen(f1040sa_xfdf_outfname,"w");
+  output_xfdf_form_data(outfile, form_us_1040_2014_schedule_a, SchedA); 
+  fclose(outfile);
+ }
+
+ if (output_SchedD) { 
+  outfile = fopen(f1040sd_xfdf_outfname,"w");
+  output_xfdf_form_data(outfile, form_us_1040_2014_schedule_d, SchedD); 
+  fclose(outfile);
+ }
 
  printf("\nListing results from file: %s\n\n", outfname);
  Display_File( outfname );

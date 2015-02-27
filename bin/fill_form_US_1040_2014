@@ -1,0 +1,19 @@
+#!/bin/bash
+
+source $(dirname "$0")/fill_form_routine.sh
+
+fill_form $fill\_f1040.xfdf f1040--2014.pdf $fill\_f1040.pdf \
+"MD5 (f1040--2014.pdf) = a7cc4b3ca751e03e06ad4dd7301b7e84" \
+"The US 1040 pdf has changed. Please report to dwalker@fifo99.com." \
+"http://www.irs.gov/pub/irs-prior/f1040--2014.pdf";
+
+fill_form $fill\_f1040sa.xfdf f1040sa--2014.pdf $fill\_f1040sa.pdf \
+"MD5 (f1040sa--2014.pdf) = 6881447f1f9a154a94973172ac43487d" \
+"The US 1040 Schedule A has changed. Please report to dwalker@fifo99.com." \
+"http://www.irs.gov/pub/irs-prior/f1040sa--2014.pdf";
+
+fill_form $fill\_f1040sd.xfdf f1040sd--2014.pdf $fill\_f1040sd.pdf \
+"MD5 (f1040sd--2014.pdf) = 5bf069cdf422f6950d7a73058ab6a4ef" \
+"The US 1040 Schedule D pdf has changed. Please report to dwalker@fifo99.com." \
+"http://www.irs.gov/pub/irs-prior/f1040sd--2014.pdf"
+

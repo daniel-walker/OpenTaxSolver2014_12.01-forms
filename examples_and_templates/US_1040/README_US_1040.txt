@@ -27,6 +27,9 @@ Run from this directory:
  numbers. You can maintain returns for multiple people over
  multiple years this way.) 
 
+To download the pdf forms and fill them out run the following,
+  ../../bin/fill_form_US_1040_2014 Fed1040_???_2014.txt
+
 For updates and further information, see:
         http://sourceforge.net/projects/opentaxsolver/
 Documentation:
