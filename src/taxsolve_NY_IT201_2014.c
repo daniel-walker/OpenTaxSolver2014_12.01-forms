@@ -30,6 +30,7 @@
 float thisversion=12.00;
 
 #include "taxsolve_routines.c"
+#include "taxsolve_NY_IT201_2014_forms.h"
 
 double A[10], S[10];
 
@@ -585,11 +586,11 @@ void tax_computation_worksheet( int status )
 int main( int argc, char *argv[] )
 {
  int j, k, argk;
- char word[1000], outfname[1000];
+ char word[1000], outfname[1000], it201_xfdf_outfname[1000], it201d_xfdf_outfname[1000];
  time_t now;
  int Dependent, Exemptions, nyc_resident;
  double itemized_ded, std_ded=0.0, LTC=0, AddAdj=0.0, CollegeDed=0.0;
- double ded_sched[MAX_LINES];
+ Lmap ded_sched;
  char prelim_1040_outfilename[5000];
 
  /* Intercept any command-line arguments. */
@@ -606,9 +607,19 @@ int main( int argc, char *argv[] )
     k = 2;
     /* Base name of output file on input file. */
     strcpy(outfname,argv[argk]);
+    strcpy(it201_xfdf_outfname,argv[argk]);
+    strcpy(it201d_xfdf_outfname,argv[argk]);
     j = strlen(outfname)-1;
     while ((j>=0) && (outfname[j]!='.')) j--;
-    if (j<0) strcat(outfname,"_out.txt"); else strcpy(&(outfname[j]),"_out.txt");
+    if (j<0) {
+     strcat(outfname,"_out.txt");
+     strcat(it201_xfdf_outfname,"_it201.xfdf");
+     strcat(it201d_xfdf_outfname,"_it201d.xfdf");
+    } else {
+     strcpy(&(outfname[j]),"_out.txt");
+     strcpy(&(it201_xfdf_outfname[j]),"_it201.xfdf");
+     strcpy(&(it201d_xfdf_outfname[j]),"_it201d.xfdf");
+    }
     outfile = fopen(outfname,"w");
     if (outfile==0) {printf("ERROR: Output file '%s' could not be opened.\n", outfname);  exit(1);}
     printf("Writing results to file:  %s\n", outfname);
@@ -660,11 +671,29 @@ int main( int argc, char *argv[] )
  // if (strncasecmp(word,"Head_of_House",4)==0) status = HEAD_OF_HOUSEHOLD; else
  // if (strncasecmp(word,"Widow",4)==0) status = WIDOW;
  // else { printf("Error: unrecognized status '%s'. Exiting.\n", word); exit(1); }
+
+ if (PrelimFedReturn.Itemized) L["itemized"] = 1;
+ else L["did_not_itemize"] = 1;
+
+ switch (status)
+ {
+  case SINGLE: L["Single"] = 1; break;
+  case MARRIED_FILLING_SEPARAT: L["MFS"] = 1; break;
+  case HEAD_OF_HOUSEHOLD: L["HOH"] = 1;; break;
+  case MARRIED_FILLING_JOINTLY: L["MFJ"] = 1; break;
+  case WIDOW: L["QW"] = 1; break;
+ }
  fprintf(outfile,"Status = %s (%d)\n", statusnames[status], status);
 
  get_parameter( infile, 's', word, "Dependent" );
  get_parameter( infile, 'b', &Dependent, "Dependent?"); 
- if (Dependent==1) fprintf(outfile," Check box C = Yes\n");  else fprintf(outfile," Check box C = No\n");
+ if (Dependent==1) {
+  fprintf(outfile," Check box C = Yes\n");
+  L["dependent"] = 1;
+ } else { 
+  fprintf(outfile," Check box C = No\n");
+  L["not_dependent"] = 1;
+ }
 
  // GetLineF( "L1", &L[1] );	/* Wages. */
  L[1] = PrelimFedReturn.fedline[7];
@@ -883,11 +912,13 @@ int main( int argc, char *argv[] )
  if (std_ded > itemized_ded) 
   {
    L[34] = std_ded; 
+   L["ny_standard"] = 1;
    showline_wmsg(34,"(Mark Std-deduction)");
   }
  else
   {
    L[34] = itemized_ded;
+   L["ny_itemized"] = 1;
    showline_wmsg(34,"(Mark Itemized-deduction)");
   }
 
@@ -1093,7 +1124,20 @@ int main( int argc, char *argv[] )
  
  fclose(infile);
  fclose(outfile);
+
+ outfile = fopen(it201_xfdf_outfname,"w");
+ output_xfdf_form_data(outfile, it201_2014, L); 
+ fclose(outfile);
+ 
+ if (std_ded < itemized_ded) {
+  outfile = fopen(it201d_xfdf_outfname,"w");
+  output_xfdf_form_data(outfile, it201d_2014, ded_sched); 
+  fclose(outfile);
+ }
+
  printf("\nListing results from file: %s\n\n", outfname);
  Display_File( outfname );
+
+
  return 0;
 }

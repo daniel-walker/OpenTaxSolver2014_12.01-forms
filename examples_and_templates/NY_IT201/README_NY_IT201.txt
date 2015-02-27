@@ -13,3 +13,7 @@ Compile:
 
 Run:
   ./taxsolve_NY_IT201_2014  NY_IT201_2014_template.txt
+
+To download the pdf forms and fill them out run the following,
+  ../../bin/fill_form_NY_IT201_2014 NY_IT201_2014_out.txt 
+

@@ -1,0 +1,14 @@
+#!/bin/bash
+
+source $(dirname "$0")/fill_form_routine.sh
+
+fill_form $fill\_it201.xfdf it201_2014_fill_in.pdf $fill\_it201.pdf \
+"MD5 (it201_2014_fill_in.pdf) = dcf14205c548f9d644e84e6f77fb1959" \
+"The NY IT-201 pdf has changed. Please report to dwalker@fifo99.com." \
+"http://www.tax.ny.gov/pdf/2014/fillin/inc/it201_2014_fill_in.pdf";
+
+fill_form $fill\_it201d.xfdf it201d_2014_fill_in.pdf $fill\_it201d.pdf \
+"MD5 (it201d_2014_fill_in.pdf) = ecdb23cd5ec04c47584220d74ce0acba" \
+"The NY IT-201-D has changed. Please report to dwalker@fifo99.com." \
+"http://www.tax.ny.gov/pdf/2014/fillin/inc/it201d_2014_fill_in.pdf";
+
