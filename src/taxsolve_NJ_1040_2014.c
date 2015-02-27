@@ -32,8 +32,10 @@ float thisversion=12.00;
 #include <time.h>
 
 #include "taxsolve_routines.c"
+#include "taxsolve_NJ_1040_2014_forms.h"
 
-double A[MAX_LINES], S[MAX_LINES], E[MAX_LINES];
+double S[MAX_LINES], E[MAX_LINES];
+Lmap A;
 
 #define SINGLE 		        1
 #define MARRIED_FILLING_JOINTLY 2
@@ -94,7 +96,7 @@ double TaxRateFunction( double income, int status )     /* Emulates table lookup
 int main( int argc, char *argv[] )
 {
  int i, j, k;
- char word[1000], outfname[4000];
+ char word[1000], outfname[4000], nj1040_outfname[4000], nj1040_sched_a_outfname[4000];
  int status=0;
  time_t now;
  int L12a=0, L12b=0;
@@ -117,9 +119,19 @@ int main( int argc, char *argv[] )
     k = 2;
     /* Base name of output file on input file. */
     strcpy(outfname,argv[i]);
+    strcpy(nj1040_outfname,argv[i]);
+    strcpy(nj1040_sched_a_outfname,argv[i]);
     j = strlen(outfname)-1;
     while ((j>=0) && (outfname[j]!='.')) j--;
-    if (j<0) strcat(outfname,"_out.txt"); else strcpy(&(outfname[j]),"_out.txt");
+    if (j<0) {
+     strcat(outfname,"_out.txt");
+     strcat(nj1040_outfname,"_nj1040.xfdf");
+     strcat(nj1040_sched_a_outfname,"nj1040abc.xfdf");
+    } else {
+     strcpy(&(outfname[j]),"_out.txt");
+     strcpy(&(nj1040_outfname[j]),"_nj1040.xfdf");
+     strcpy(&(nj1040_sched_a_outfname[j]),"_nj1040abc.xfdf");
+    }
     outfile = fopen(outfname,"w");
     if (outfile==0) {printf("ERROR: Output file '%s' could not be opened.\n", outfname); exit(1);}
     printf("Writing results to file:  %s\n", outfname);
@@ -159,11 +171,11 @@ int main( int argc, char *argv[] )
  /* get_parameter(infile, kind, x, mesage ) */
  get_parameter( infile, 's', word, "Status" );
  get_parameter( infile, 'l', word, "Status ?");
- if (strncasecmp(word,"Single",4)==0) status = SINGLE; else
- if (strncasecmp(word,"Married/Joint",13)==0) status = MARRIED_FILLING_JOINTLY; else
- if (strncasecmp(word,"Married/Sep",11)==0) status = MARRIED_FILLING_SEPARAT; else
- if (strncasecmp(word,"Head_of_House",4)==0) status = HEAD_OF_HOUSEHOLD; else
- if (strncasecmp(word,"Widow",4)==0) status = WIDOW;
+ if (strncasecmp(word,"Single",4)==0) { status = SINGLE; L["Single"] = 1; } else
+ if (strncasecmp(word,"Married/Joint",13)==0) { status = MARRIED_FILLING_JOINTLY; L["MFJ"] = 1; } else
+ if (strncasecmp(word,"Married/Sep",11)==0) { status = MARRIED_FILLING_SEPARAT; L["MFS"] = 1; } else
+ if (strncasecmp(word,"Head_of_House",4)==0) { status = HEAD_OF_HOUSEHOLD; L["HOH"] = 1; } else
+ if (strncasecmp(word,"Widow",4)==0) { status = WIDOW; L["QW"] = 1; }
  else
   { 
    printf("Error: unrecognized status '%s'. Must be: Single, Married/joint, Married/sep, Head_of_house, Widow(er)\nExiting.\n", word); 
@@ -210,8 +222,10 @@ int main( int argc, char *argv[] )
  shownum(11); 
 
  L12a = L[6] + L[7] + L[8] + L[11];
+ L["12a"] = L12a;
  fprintf(outfile,"L12a = %d\n", L12a);
  L12b = L[9] + L[10];
+ L["12b"] = L12b;
  fprintf(outfile,"L12b = %d\n", L12b);
 
  GetLineF( "L14", &L[14] );	/* Wages. */
@@ -249,7 +263,11 @@ int main( int argc, char *argv[] )
 
  GetLineF( "L27a", &L27a );	/* Pension Exclusion (See pg 26). */
  GetLineF( "L27b", &L27b );	/* Other Retirement Income Exclusion (See worksheet pg 26). */
+
+ L["27a"] = L27a;
+ L["27b"] = L27b;
  L[27] = L27a + L27b;
+ L["27c"] = L[27];
  showline(27);
 
  L[28] = L[26] - L[27];
@@ -359,28 +377,44 @@ int main( int argc, char *argv[] )
  else
   { /*SchedA+Worksheet-I*/
     fprintf(outfile,"\nSchedule A:\n");
-    showline_wrksht('A', 1, A); 
+    fprintf(outfile," %c%d = %6.2f\n", 'A', 1, A[1]);
+
     A[2] = L[28];
-    showline_wrksht('A', 2, A); 
+    fprintf(outfile," %c%d = %6.2f\n", 'A', 2, A[2]);
+
     A[3] = smallerof( 1.0, (A[1] / A[2]) );
     fprintf(outfile," A3 = %6.2f %%\n", 100.0 * A[3] );
+    A["3p"] = 100.0*A[3];
     A[4] = L[36];
+    A["4a"] = L[36];
+    A["4b"] = L[36];
     fprintf(outfile," A4a = %6.2f	A4b = %6.2f\n", A[4], A[4] );
     fprintf(outfile," (5a = %6.2f)\n", F[1] );
+    A["5a"] = F[1];
     A[5] = F[2];
+    A["5aa"] = F[2];
     fprintf(outfile," A5a = %6.2f	A5b = %6.2f\n", A[5], 0.0);
     A[6]  = A[4] - A[5];
+    A["6a"] = A[6];
     Ab[6] = A[4] - 0.0;
+    A["6b"] = Ab[6];
     fprintf(outfile," A6a = %6.2f	A6b = %6.2f\n", A[6], Ab[6]);
     A[7]  = TaxRateFunction( A[6], status );
+    A["7a"] = A[7];
     Ab[7] = TaxRateFunction( Ab[6], status );
+    A["7b"] = Ab[7];
     fprintf(outfile," A7a = %6.2f	A7b = %6.2f\n", A[7], Ab[7] );
     A[8]  = A[3] * A[7];
+    A["8a"] = A[8];
     Ab[8] = A[3] * Ab[7];
+    A["8b"] = Ab[8];
     fprintf(outfile," A8a = %6.2f	A8b = %6.2f\n", A[8], Ab[8] );
     fprintf(outfile,"  (9a = %6.2f)\n", A9a );
+    A["9a"] = A9a;
     A[9] = smallerof( smallerof( A9a, A[8] ), A[7] );
+    A["9aa"] = A[8];
     Ab[9] = smallerof( smallerof( A9a, Ab[8] ), Ab[7] );
+    A["9ab"] = Ab[9];
     fprintf(outfile," A9a = %6.2f	A9b = %6.2f\n", A[9], Ab[9] );
 
     fprintf(outfile,"\nWorksheet I:\n");
@@ -485,6 +519,15 @@ int main( int argc, char *argv[] )
  
  fclose(infile);
  fclose(outfile);
+
+ outfile = fopen(nj1040_outfname,"w");
+ output_xfdf_form_data(outfile, nj1040_2014, L); 
+ fclose(outfile);
+
+ outfile = fopen(nj1040_sched_a_outfname,"w");
+ output_xfdf_form_data(outfile, nj_schedule_a_2014, A); 
+ fclose(outfile);
+
  Display_File( outfname );
  printf("\nResults written to file:  %s\n", outfname);
  return 0;

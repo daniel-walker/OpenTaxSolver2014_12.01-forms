@@ -13,3 +13,7 @@ Compile:
 
 Run:
   ./taxsolve_NJ_1040_2014  NJ_1040_2014.txt
+
+To download the pdf forms and fill them out run the following,
+  ../../bin/fill_form_NJ_1040_2014 NJ_1040_2014_out.txt 
+
