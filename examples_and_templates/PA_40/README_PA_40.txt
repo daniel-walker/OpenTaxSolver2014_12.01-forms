@@ -20,6 +20,8 @@ Compile:
 Run:
   ./taxsolve_PA40_2014  PA40_2014.txt
 
+To download the pdf forms and fill them out run the following,
+  ../../bin/fill_form_PA_40_2014 PA40_2014_out.txt 
 
 For updates and further information, see:
         http://sourceforge.net/projects/opentaxsolver/

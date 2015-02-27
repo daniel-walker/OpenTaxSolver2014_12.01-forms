@@ -27,6 +27,7 @@
 #define version 12.0
 
 #include "taxsolve_routines.c"
+#include "taxsolve_PA_40_2014_forms.h"
 
 #define SINGLE 		        1
 #define MARRIED_FILLING_JOINTLY 2
@@ -40,7 +41,7 @@
 int main( int argc, char *argv[] )
 {
  int i, j, k, status=0;
- char word[2000], outfname[1500];
+ char word[2000], outfname[1500], pa40_xfdf_outfname[1500];
  time_t now;
  double oneA, oneB;
 
@@ -58,9 +59,16 @@ int main( int argc, char *argv[] )
     k = 2;
     /* Base name of output file on input file. */
     strcpy(outfname,argv[i]);
+    strcpy(pa40_xfdf_outfname,argv[i]);
     j = strlen(outfname)-1;
     while ((j>=0) && (outfname[j]!='.')) j--;
-    if (j<0) strcat(outfname,"_out.txt"); else strcpy(&(outfname[j]),"_out.txt");
+    if (j<0) {
+     strcat(outfname,"_out.txt");
+     strcat(pa40_xfdf_outfname,"_pa40.xfdf");
+    } else {
+     strcpy(&(outfname[j]),"_out.txt");
+     strcpy(&(pa40_xfdf_outfname[j]),"_pa40.xfdf");
+    }
     outfile = fopen(outfname,"w");
     if (outfile==0) {printf("ERROR: Output file '%s' could not be opened.\n", outfname); exit(1);}
     printf("Writing results to file:  %s\n", outfname);
@@ -89,10 +97,10 @@ int main( int argc, char *argv[] )
  /* get_parameter(infile, kind, x, emssg ) */
  get_parameter( infile, 's', word, "Status" );	/* Single, Married/joint, Married/sep, Widow(er) */
  get_parameter( infile, 'l', word, "Status?");
- if (strncasecmp(word,"Single",4)==0) status = SINGLE; else
- if (strncasecmp(word,"Married/Joint",13)==0) status = MARRIED_FILLING_JOINTLY; else
- if (strncasecmp(word,"Married/Sep",11)==0) status = MARRIED_FILLING_SEPARAT; else
- if (strncasecmp(word,"Widow",4)==0) status = WIDOW;
+ if (strncasecmp(word,"Single",4)==0) { status = SINGLE; L["Single"] = 1; }else
+ if (strncasecmp(word,"Married/Joint",13)==0) { status = MARRIED_FILLING_JOINTLY; L["MFJ"] = 1; }else
+ if (strncasecmp(word,"Married/Sep",11)==0) { status = MARRIED_FILLING_SEPARAT; L["MFS"] = 1; } else
+ if (strncasecmp(word,"Widow",4)==0) { status = WIDOW; L["Deceased"] = 1; }
  else
   { 
    printf("Error: unrecognized status '%s'. Exiting.\n", word); 
@@ -102,10 +110,13 @@ int main( int argc, char *argv[] )
  fprintf(outfile,"Status = %s (%d)\n", word, status);
 
  GetLineF( "L1a", &oneA );	/* Gross compensation. */
-
+ L["1a"] = oneA;
  GetLineF( "L1b", &oneB );	/* Unreimbursed employee business expenses. */
+ L["1b"] = oneB;
 
  L[1] = oneA - oneB;
+ L["1c"] = L[1];
+
  fprintf(outfile,"L1c = %2.2f\n", L[1] );		/* Net compensation. */
  
  GetLineF( "L2", &L[2] );	/* Interest Income. */
@@ -113,11 +124,12 @@ int main( int argc, char *argv[] )
  GetLineF( "L3", &L[3] );	/* Dividend Income. */
 
  GetLineF( "L4", &L[4] );	/* Income or loss for business operations. */
-
+ if (L[4] < 0) L["4l"] = 1;
  GetLineF( "L5", &L[5] );	/* Net gain or loss from disposition of property. */
+ if (L[5] < 0) L["5l"] = 1;
 
  GetLineF( "L6", &L[6] );	/* Net gain or loss rents, royalties, patents, or copyrights. */
-
+ if (L[6] < 0) L["6l"] = 1;
  GetLineF( "L7", &L[7] );	/* Estate or Trust Income. */
 
  GetLineF( "L8", &L[8] );	/* Gambling or lottery winnings. */
@@ -182,6 +194,11 @@ int main( int argc, char *argv[] )
  
  fclose(infile);
  fclose(outfile);
+
+ outfile = fopen(pa40_xfdf_outfname,"w");
+ output_xfdf_form_data(outfile, pa40_2014, L); 
+ fclose(outfile);
+
  printf("\nListing results from file: %s\n\n", outfname);
  Display_File( outfname );
  return 0;
