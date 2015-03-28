@@ -1,11 +1,12 @@
 This is a version of OTS which will download and fill out the forms
-for you. Mainly for the command line people , but who else uses OTS
-anyway ?
+for you. Mainly for the command line people, but who else uses OTS
+anyway?
 
-You use it the same way that you use the normal OTS, but inside the
-README for the US and state example directory there is a command which
-can be run which will download the proper forms and fill them out using
-pdftk. 
+You use it the same way that you use the normal OTS. The OTS tools now
+emit .xfdf files, these can be used by pdftk to fill in the government
+supplied PDF files. Inside the README for the US and state example
+directory there is a command which can be run which will download the
+proper forms and fill them out using pdftk.
 
 This version if experimental, and I would love to get some feedback if
 people find issues.
