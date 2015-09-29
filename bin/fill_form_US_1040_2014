@@ -3,17 +3,31 @@
 source $(dirname "$0")/fill_form_routine.sh
 
 fill_form $fill\_f1040.xfdf f1040--2014.pdf $fill\_f1040.pdf \
-"MD5 (f1040--2014.pdf) = a7cc4b3ca751e03e06ad4dd7301b7e84" \
+"a7cc4b3ca751e03e06ad4dd7301b7e84" \
 "The US 1040 pdf has changed. Please report to dwalker@fifo99.com." \
 "http://www.irs.gov/pub/irs-prior/f1040--2014.pdf";
 
 fill_form $fill\_f1040sa.xfdf f1040sa--2014.pdf $fill\_f1040sa.pdf \
-"MD5 (f1040sa--2014.pdf) = 6881447f1f9a154a94973172ac43487d" \
+"6881447f1f9a154a94973172ac43487d" \
 "The US 1040 Schedule A has changed. Please report to dwalker@fifo99.com." \
 "http://www.irs.gov/pub/irs-prior/f1040sa--2014.pdf";
 
 fill_form $fill\_f1040sd.xfdf f1040sd--2014.pdf $fill\_f1040sd.pdf \
-"MD5 (f1040sd--2014.pdf) = 5bf069cdf422f6950d7a73058ab6a4ef" \
+"5bf069cdf422f6950d7a73058ab6a4ef" \
 "The US 1040 Schedule D pdf has changed. Please report to dwalker@fifo99.com." \
 "http://www.irs.gov/pub/irs-prior/f1040sd--2014.pdf"
 
+fill_form $fill\_f8959.xfdf f8959--2014.pdf $fill\_f8959.pdf \
+"4a3a68c090567f06a91c22def7114deb" \
+"The US 8959 pdf has changed. Please report to dwalker@fifo99.com." \
+"http://www.irs.gov/pub/irs-prior/f8959--2014.pdf"
+
+fill_form $fill\_f8960.xfdf f8960--2014.pdf $fill\_f8960.pdf \
+"44accfe2a67be69a1905eb59d7acedeb" \
+"The US 8960 pdf has changed. Please report to dwalker@fifo99.com." \
+"http://www.irs.gov/pub/irs-prior/f8960--2014.pdf"
+
+fill_form $fill\_f6251.xfdf f6251--2014.pdf $fill\_f6251.pdf \
+"819e1bb9fd6e64600d4dafbe3183deaf" \
+"The US 6251 pdf has changed. Please report to dwalker@fifo99.com." \
+"http://www.irs.gov/pub/irs-prior/f6251--2014.pdf"

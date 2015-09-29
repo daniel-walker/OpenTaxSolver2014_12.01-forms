@@ -3,12 +3,12 @@
 source $(dirname "$0")/fill_form_routine.sh
 
 fill_form $fill\_ca540.xfdf 14_540.pdf $fill\_ca540.pdf \
-"MD5 (14_540.pdf) = 0a0a397a1fcdffb9b1ccc72eb2dc25ea" \
+"0a0a397a1fcdffb9b1ccc72eb2dc25ea" \
 "The CA 540 pdf has changed. Please report to dwalker@fifo99.com." \
 "https://www.ftb.ca.gov/forms/2014/14_540.pdf";
 
 fill_form $fill\_540ca.xfdf 14_540ca.pdf $fill\_540ca.pdf \
-"MD5 (14_540ca.pdf) = abe3798b184d3adfd3739ec4c9fbb67e" \
+"abe3798b184d3adfd3739ec4c9fbb67e" \
 "The NJ Schedule A&B has changed. Please report to dwalker@fifo99.com." \
 "https://www.ftb.ca.gov/forms/2014/14_540ca.pdf";
 

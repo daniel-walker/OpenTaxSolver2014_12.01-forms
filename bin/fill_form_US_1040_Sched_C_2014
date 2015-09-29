@@ -3,7 +3,7 @@
 source $(dirname "$0")/fill_form_routine.sh
 
 fill_form $fill\_f1040sc.xfdf f1040sc--2014.pdf $fill\_f1040sc.pdf \
-"MD5 (f1040sc--2014.pdf) = 613cc34e61a1d4ca41dc7dd2cde8c212" \
+"613cc34e61a1d4ca41dc7dd2cde8c212" \
 "The US 1040 Schedule C has changed. Please report to dwalker@fifo99.com." \
 "http://www.irs.gov/pub/irs-prior/f1040sc--2014.pdf";
 

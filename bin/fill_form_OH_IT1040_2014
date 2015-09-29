@@ -3,7 +3,7 @@
 source $(dirname "$0")/fill_form_routine.sh
 
 fill_form $fill\_it1040.xfdf PIT_IT1040_FI.pdf $fill\_it1040.pdf \
-"MD5 (PIT_IT1040_FI.pdf) = 13737c3ae393b676019b98c267a96cce" \
+"13737c3ae393b676019b98c267a96cce" \
 "The OH IT1040 pdf has changed. Please report to dwalker@fifo99.com." \
 "http://www.tax.ohio.gov/portals/0/forms/ohio_individual/individual/2014/PIT_IT1040_FI.pdf";
 
