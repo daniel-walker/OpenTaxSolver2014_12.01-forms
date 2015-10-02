@@ -1,5 +1,7 @@
 Title:  US Federal 1040 Tax Form - 2014 - EXAMPLE
 
+PersonalFilename ../examples_and_templates/pers.txt
+
 Status     Married/Joint {Single, Married/Joint, Head_of_House, Married/Sep, Widow(er)}
 
 Under65?      Yes       { Age at end of 2014. (Yes/No) If Married/Joint, Y=both-under, N=both-over, 1=One-over }
@@ -125,6 +127,9 @@ L60a            ;       { Household employment taxes. Sched H }
 L60b            ;       { First-time homebuyer credit repayment. Form 5405. }
 L61             ;       { Health care: individual responsibility. }
 L62		;	{ Taxes from Forms 8959, 8960, others. }
+f8959L1         10;       { Medicare wages for form8959 Line 1, take from Box 5 of all W-2s}
+f8959L19        20;       { Medicare withheld for form8959 Line 19, take from Box 6 of all W-2s}
+f8960L3         30;       { Annuities for form8960 Line 3}
 
 {Payments}
 L64      1165.50        {Federal income tax witheld, from W-2's, box-2 }

@@ -47,10 +47,10 @@ float thisversion=12.01;
 #define Yes 1
 #define No  0
 
-Lmap SchedA, SchedD;
+Lmap SchedA, SchedD, Sched8959, Sched8960, amtws;
 double L9b=0.0;			 /* Qualified dividends. */
 double qcgws6=0.0, qcgws7=0.0;	 /* Support for AMT calculation. (qual.div+cap.gain wrksht vals.)*/
-int Do_SchedD=No, Do_QDCGTW=No, Do_SDTW=No, output_SchedD=No;
+int Do_SchedD=No, Do_QDCGTW=No, Do_SDTW=No, output_SchedD=No, output_8959=No, output_8960=No, output_6251=No;
 int status, under65=Yes, over65=No, dependent=No;
 double  L60b=0.0, collectibles_gains=0.0, ws_sched_D[MAX_LINES], idws_thresh=0.0, idws[MAX_LINES];
 
@@ -109,7 +109,7 @@ double TaxRateFunction( double income, int status )     /* Emulates table lookup
 void showschedA( int linenum )
 { if (SchedA[linenum] > 0.0) fprintf(outfile," A%d = %6.2f\n", linenum, SchedA[linenum] ); }
 
-void showschedA_wMsg( int linenum, char *msg )
+void showschedA_wMsg( int linenum, const char *msg )
 { if (SchedA[linenum] > 0.0) fprintf(outfile," A%d = %6.2f	%s\n", linenum, SchedA[linenum], msg ); }
 
 
@@ -187,7 +187,7 @@ void capgains_qualdividends_worksheets( int status, double L9b )		/* Updated for
 /*----------------------------------------------------------------------------------------------*/
 double form6251_AlternativeMinimumTax( int itemized )						/* Updated for 2014. */
 {
- double amtws[100], ws[100], thresholdA=0, thresholdB=0, thresholdC=182500.0, amtexmption;
+  double /* amtws[100], */ ws[100], thresholdA=0, thresholdB=0, thresholdC=182500.0, amtexmption;
  double offsetA=3650.0, sum8_27=0.0;
  int j;
 
@@ -405,6 +405,7 @@ double form6251_AlternativeMinimumTax( int itemized )						/* Updated for 2014. 
    }
  fprintf(outfile,"Your Alternative Minimum Tax = %8.2f\n", amtws[35] ); 
  printf("Your Alternative Minimum Tax = %8.2f\n", amtws[35] ); 
+ output_6251=Yes;
  return amtws[35];
 }
 
@@ -681,7 +682,7 @@ void get_gain_and_losses( char const *label )
 /*   sell_amnt  date 							*/
 /*									*/
 /************************************************************************/
-void get_cap_gains( char *emssg	)							/* Updated for 2014. */
+void get_cap_gains( const char *emssg	)							/* Updated for 2014. */
 {
  char word[1024], *LastYearsOutFile=0;
  int j, doline22=0;
@@ -1000,7 +1001,145 @@ void sched_D_tax_worksheet( int status, double L9b )				/* Updated for 2014. */
  for (k = 0; k < 100; k++) ws_sched_D[k] = ws[k];	/* Save worksheet values for AMT, if needed. */
 }
 
+/*----------------------------------------------------------------------------------------------*/
+/* Form-8959 - Simple calc                                  		                            */
+/*       Otherwise, user-provided number is returned 			                                */
+/*----------------------------------------------------------------------------------------------*/
+double form8959_MedicareAdditionalTax(double* f8959_ExcessMedicareWithholding)	/* First applied in2013. */
+{
+  printf(        "Review form8959 routine for your situation.\n");
+ fprintf(outfile,"Review form8959 routine for your situation.\n");
 
+  printf(        "\t\tf8959.L1: Medicare Wages from Box 5 of all W2 forms %8.2f\n", Sched8959[1]);
+ fprintf(outfile,"\t\tf8959.L1: Medicare Wages from Box 5 of all W2 forms %8.2f\n", Sched8959[1]);
+
+ Sched8959[4] = Sched8959[1];
+  printf(        "\t\tf8959.L4: Total medicare wages %8.2f\n", Sched8959[4]);
+ fprintf(outfile,"\t\tf8959.L4: Total medicare wages %8.2f\n", Sched8959[4]);
+
+ double	medwages_magi_threshold	= 0.0;
+ switch (status)
+  {
+  case SINGLE: case HEAD_OF_HOUSEHOLD: case WIDOW:	medwages_magi_threshold	= 200000.0; break;
+  case MARRIED_FILLING_JOINTLY: 					medwages_magi_threshold	= 250000.0; break;
+  case MARRIED_FILLING_SEPARAT: 					medwages_magi_threshold	= 125000.0; break;
+  default:  printf("form8959_MedicareAdditionalTax: Status %d not handled.\n", status);  exit(1); 
+  }
+
+ Sched8959[5] = medwages_magi_threshold;
+  printf(        "\t\tf8959.L5: medwages magi threshold  %8.2f\n", Sched8959[5]);
+ fprintf(outfile,"\t\tf8959.L5: medwages magi threshold  %8.2f\n", Sched8959[5]);
+
+ Sched8959[6] = NotLessThanZero(Sched8959[4] - Sched8959[5]);
+  printf(        "\t\tf8959.L6: medwages magi less threshold %8.2f\n", Sched8959[6]);
+ fprintf(outfile,"\t\tf8959.L6: medwages magi less threshold %8.2f\n", Sched8959[6]);
+
+ Sched8959[7]	= 0.009 * Sched8959[6];
+  printf(        "f8959 Medicare Additional Tax on Medwages = %8.2f\n", Sched8959[7]); 
+ fprintf(outfile,"f8959 Medicare Additional Tax on Medwages = %8.2f\n", Sched8959[7]); 
+
+ if (Sched8959[7] > 0) L["62_8959"]	= 1;
+
+ Sched8959[18]	= Sched8959[7];
+  printf(        "Your f8959 Medicare Additional Tax = %8.2f\n", Sched8959[18]);
+ fprintf(outfile,"Your f8959 Medicare Additional Tax = %8.2f\n", Sched8959[18]);
+
+  printf(        "\t\tf8959.L19: Medicare Withholding from Box 6 of all W2 forms %8.2f\n", Sched8959[19]);
+ fprintf(outfile,"\t\tf8959.L19: Medicare Withholding from Box 6 of all W2 forms %8.2f\n", Sched8959[19]);
+
+ Sched8959[20] = Sched8959[1];
+   printf(        "\t\tf8959.L20: from 8959 Line 1 %8.2f\n", Sched8959[20]);
+  fprintf(outfile,"\t\tf8959.L20: from 8959 Line 1 %8.2f\n", Sched8959[20]);
+
+ Sched8959[21] = 0.0145 * Sched8959[20];
+   printf(        "\t\tf8959.L21: Regular Medicare tax on medwages %8.2f\n", Sched8959[21]);
+  fprintf(outfile,"\t\tf8959.L21: Regular Medicare tax on medwages %8.2f\n", Sched8959[21]);
+
+  Sched8959[22] = NotLessThanZero(Sched8959[19] - Sched8959[21]);
+  printf(        "\t\tf8959.L22: Additional Medicare tax withholding %8.2f\n", Sched8959[22]);
+ fprintf(outfile,"\t\tf8959.L22: Additional Medicare tax withholding %8.2f\n", Sched8959[22]);
+
+ Sched8959[24] = Sched8959[22];
+  printf(        "\t\tf8959.L24: Total Additional Medicare tax withholding %8.2f\n", Sched8959[24]);
+ fprintf(outfile,"\t\tf8959.L24: Total Additional Medicare tax withholding %8.2f\n", Sched8959[24]);
+
+ *f8959_ExcessMedicareWithholding	= Sched8959[24];
+
+ output_8959=Yes;
+
+ return Sched8959[18];
+}
+
+/*----------------------------------------------------------------------------------------------*/
+/* Form-8960 - Simple calc 																		*/
+/*----------------------------------------------------------------------------------------------*/
+double form8960_NetInvIncomeTax( void )					/* First applied in2013. */
+{
+  printf(        "Review form8960 routine for your situation.\n");
+ fprintf(outfile,"Review form8960 routine for your situation.\n");
+
+ Sched8960[1]	= L[8];
+  printf(        "\t\tf8960.L1: Taxable Interest  %8.2f\n", Sched8960[1]);
+ fprintf(outfile,"\t\tf8960.L1: Taxable Interest  %8.2f\n", Sched8960[1]);
+
+ Sched8960[2]	= L[9];
+  printf(        "\t\tf8960.L2: Ordinary Dividends  %8.2f\n", Sched8960[2]);
+ fprintf(outfile,"\t\tf8960.L2: Ordinary Dividends  %8.2f\n", Sched8960[2]);
+
+  printf(        "\t\tf8960.L3: Annuities  %8.2f\n", Sched8960[3]);
+ fprintf(outfile,"\t\tf8960.L3: Annuities  %8.2f\n", Sched8960[3]);
+
+ Sched8960[7]	= L[21];
+  printf(        "\t\tf8960.L7  Other modifications %8.2f\n", Sched8960[7]);
+ fprintf(outfile,"\t\tf8960.L7  Other modifications %8.2f\n", Sched8960[7]);
+
+ Sched8960[8] = Sched8960[1] + Sched8960[2] + Sched8960[3] + Sched8960[7];
+ printf("\t\tf8960.L8: Total investment income  %8.2f\n", Sched8960[8]);
+ fprintf(outfile,"\t\tf8960.L8: Total investment income  %8.2f\n", Sched8960[8]);
+
+ double	f8960_ded	= 0.0;
+  printf(        "\t\tf8960.L11: Total deductions investment income  %8.2f\n", f8960_ded);
+ fprintf(outfile,"\t\tf8960.L11: Total deductions investment income  %8.2f\n", f8960_ded);
+
+ Sched8960[12] = Sched8960[8] - f8960_ded;	// niit_taxable
+  printf(        "\t\tf8960.L12: Netinvestment income  %8.2f\n", Sched8960[12]);
+ fprintf(outfile,"\t\tf8960.L12: Netinvestment income  %8.2f\n", Sched8960[12]);
+
+ Sched8960[13] = L[38];
+  printf(        "\t\tf8960.L13: Modified AGI  %8.2f\n", Sched8960[13]);
+ fprintf(outfile,"\t\tf8960.L13: Modified AGI  %8.2f\n", Sched8960[13]);
+
+ double	niit_magi_threshold	= 0.0;
+ switch (status)
+  {
+  case SINGLE: case HEAD_OF_HOUSEHOLD:			niit_magi_threshold	= 200000.0; break;
+  case MARRIED_FILLING_JOINTLY: case WIDOW:		niit_magi_threshold	= 250000.0; break;
+  case MARRIED_FILLING_SEPARAT: 				niit_magi_threshold	= 125000.0; break;
+  default:  printf("form8960_NetInvIncomeTax: Status %d not handled.\n", status);  exit(1); 
+  }
+
+ Sched8960[14] = niit_magi_threshold;
+  printf(        "\t\tf8960.L14: niit magi threshold  %8.2f\n", Sched8960[14]);
+ fprintf(outfile,"\t\tf8960.L14: niit magi threshold  %8.2f\n", Sched8960[14]);
+
+ Sched8960[15] = NotLessThanZero(Sched8960[13] - Sched8960[14]);
+  printf(        "\t\tf8960.L15: niit magi less threshold %8.2f\n", Sched8960[15]);
+ fprintf(outfile,"\t\tf8960.L15: niit magi less threshold %8.2f\n", Sched8960[15]);
+
+ Sched8960[16] = smallerof(Sched8960[15], Sched8960[12]);
+  printf(        "\t\tf8960.L16: niit taxable amount  %8.2f\n", Sched8960[16]);
+ fprintf(outfile,"\t\tf8960.L16: niit taxable amount  %8.2f\n", Sched8960[16]);
+
+ Sched8960[17]	= 0.038 * Sched8960[16];
+  printf(        "Your f8960 Net Investment Income Tax = %8.2f\n", Sched8960[17]); 
+ fprintf(outfile,"Your f8960 Net Investment Income Tax = %8.2f\n", Sched8960[17]); 
+
+ output_8960=Yes;
+
+ if (Sched8960[17] > 0) L["62_8960"]	= 1;
+
+ return Sched8960[17];
+}
 
 /*----------------------------------------------------------------------*/
 /* Main									*/
@@ -1008,7 +1147,7 @@ void sched_D_tax_worksheet( int status, double L9b )				/* Updated for 2014. */
 int main( int argc, char *argv[] )						/* Not Yet Updated for 2014. */
 {
  int argk, j, k, itemize=0;
- char word[2000], outfname[1000], f1040_xfdf_outfname[1000], f1040sa_xfdf_outfname[1000], f1040sd_xfdf_outfname[1000];
+ char word[2000], outfname[1000], f1040_xfdf_outfname[1000], f1040sa_xfdf_outfname[1000], f1040sd_xfdf_outfname[1000], f8959_xfdf_outfname[1000], f8960_xfdf_outfname[1000], f6251_xfdf_outfname[1000];
  time_t now;
  double exemption_threshold=0.0, dedexws[20];
  double S_STD_DEDUC, MFS_STD_DEDUC, MFJ_STD_DEDUC, HH_STD_DEDUC;
@@ -1030,6 +1169,9 @@ int main( int argc, char *argv[] )						/* Not Yet Updated for 2014. */
     strcpy(f1040_xfdf_outfname,argv[argk]);
     strcpy(f1040sa_xfdf_outfname,argv[argk]);
     strcpy(f1040sd_xfdf_outfname,argv[argk]);
+    strcpy(f8959_xfdf_outfname,argv[argk]);
+    strcpy(f8960_xfdf_outfname,argv[argk]);
+    strcpy(f6251_xfdf_outfname,argv[argk]);
     j = strlen(outfname)-1;
     while ((j>=0) && (outfname[j]!='.')) j--;
     if (j<0) {
@@ -1037,11 +1179,17 @@ int main( int argc, char *argv[] )						/* Not Yet Updated for 2014. */
 	strcat(f1040_xfdf_outfname,"_f1040.xfdf");
 	strcat(f1040sa_xfdf_outfname,"_f1040sa.xfdf");
 	strcat(f1040sd_xfdf_outfname,"_f1040sd.xfdf");
+	strcat(f8959_xfdf_outfname,"_f8959.xfdf");
+	strcat(f8960_xfdf_outfname,"_f8960.xfdf");
+	strcat(f6251_xfdf_outfname,"_f6251.xfdf");
 	} else {
 	strcpy(&(outfname[j]),"_out.txt");
 	strcpy(&(f1040_xfdf_outfname[j]),"_f1040.xfdf");
 	strcpy(&(f1040sa_xfdf_outfname[j]),"_f1040sa.xfdf");
 	strcpy(&(f1040sd_xfdf_outfname[j]),"_f1040sd.xfdf");
+	strcpy(&(f8959_xfdf_outfname[j]),"_f8959.xfdf");
+	strcpy(&(f8960_xfdf_outfname[j]),"_f8960.xfdf");
+	strcpy(&(f6251_xfdf_outfname[j]),"_f6251.xfdf");
 	}
     outfile = fopen(outfname,"w");
     if (outfile==0) {printf("ERROR: Output file '%s' could not be opened.\n", outfname); exit(1);}
@@ -1060,6 +1208,8 @@ int main( int argc, char *argv[] )						/* Not Yet Updated for 2014. */
    L[j] = 0.0;
    SchedA[j] = 0.0; 
    SchedD[j] = 0.0;
+   Sched8959[j] = 0.0;
+   Sched8960[j] = 0.0;
    idws[j] = 0.0;
    ws_sched_D[j] = 0.0;
   }
@@ -1079,6 +1229,8 @@ int main( int argc, char *argv[] )						/* Not Yet Updated for 2014. */
  read_line( infile, word );
  now = time(0);
  fprintf(outfile,"\n%s 	%s\n", word, ctime( &now ));
+
+ get_personal_details(infile);
 
  /* get_parameter(infile, kind, x, emssg ) */
  get_parameter( infile, 's', word, "Status" );	/* Single, Married/joint, Married/sep, Head house, Widow(er) */
@@ -1355,9 +1507,14 @@ int main( int argc, char *argv[] )						/* Not Yet Updated for 2014. */
 	idws[9] = smallerof( idws[4], idws[8] );
 	idws[10] = idws[1] - idws[9];
 	SchedA[29] = idws[10];
+    fprintf(outfile," Your deduction was limited (from %8.2f) to %8.2f\n", idws[1], SchedA[29] );
+	SchedA["29y"] = 1;
        }
       else
+		{
        SchedA[29] = idws[1];
+	   SchedA["29n"] = 1;
+		}
      }
     fprintf(outfile," Itemized Deductions Worksheet:\n");
     for (j=1; j <= 10; j++)
@@ -1565,6 +1722,20 @@ int main( int argc, char *argv[] )						/* Not Yet Updated for 2014. */
  ShowLineNonZero(61);
 
  GetLine( "L62", &L[62] );	/* Taxes from Forms 8959, 8960, others. */
+ double f8959_ExcessMedicareWitholding = 0.0;
+ if(true)
+   {
+	 GetLine( "f8959L1", &Sched8959[1]);	/* form 8959 Line 1 - Medicare wages */
+	 fprintf(outfile, "f8959L1 = %6.2f\n", Sched8959[1]);
+
+	 GetLine( "f8959L19", &Sched8959[19]);	/* form 8959 Line 19 - Medicare withholding */
+	 fprintf(outfile, "Sched8959[19] = %6.2f\n", Sched8959[19]);
+
+	 GetLine( "f8960L3", &Sched8960[3]);	/* form 8960 Line 3 - Annuities */
+	 fprintf(outfile, "Sched8960[3] = %6.2f\n", Sched8960[3]);
+
+	 L[62]	+= form8959_MedicareAdditionalTax(&f8959_ExcessMedicareWitholding) + form8960_NetInvIncomeTax();
+   }
  ShowLineNonZero(62);
 
  for (j = 56; j <= 62; j++)
@@ -1575,6 +1746,10 @@ int main( int argc, char *argv[] )						/* Not Yet Updated for 2014. */
  /* Payments section. */
 
  GetLineF( "L64", &L[64] );	/* Federal income tax withheld, Forms W-2, 1099 */
+
+ ShowLineNonZero(64);
+ L[64]	+= f8959_ExcessMedicareWitholding;
+ ShowLineNonZero(64);
 
  GetLine( "L65", &L[65] );	/* 2014 estimated payments + amnt applied from last year. */
  ShowLineNonZero(65);
@@ -1613,8 +1788,9 @@ int main( int argc, char *argv[] )						/* Not Yet Updated for 2014. */
  if (L[74] > L[63])
   {
    L[75] = L[74] - L[63];
+   L["76a"]	= L[75];
    fprintf(outfile,"L75 = %6.2f  REBATE!!!\n", L[75] );
-   fprintf(outfile,"L76a = %6.2f \n", L[75] );
+   fprintf(outfile,"L76a = %6.2f \n", L["76a"] );
   }
  else 
   {
@@ -1640,6 +1816,24 @@ int main( int argc, char *argv[] )						/* Not Yet Updated for 2014. */
  if (output_SchedD) { 
   outfile = fopen(f1040sd_xfdf_outfname,"w");
   output_xfdf_form_data(outfile, form_us_1040_2014_schedule_d, SchedD); 
+  fclose(outfile);
+ }
+
+ if (output_6251) { 
+  outfile = fopen(f6251_xfdf_outfname,"w");
+  output_xfdf_form_data(outfile, form_us_6251_2014, amtws); 
+  fclose(outfile);
+ }
+
+ if (output_8959) { 
+  outfile = fopen(f8959_xfdf_outfname,"w");
+  output_xfdf_form_data(outfile, form_us_8959_2014, Sched8959); 
+  fclose(outfile);
+ }
+
+ if (output_8960) { 
+  outfile = fopen(f8960_xfdf_outfname,"w");
+  output_xfdf_form_data(outfile, form_us_8960_2014, Sched8960); 
   fclose(outfile);
  }
 
