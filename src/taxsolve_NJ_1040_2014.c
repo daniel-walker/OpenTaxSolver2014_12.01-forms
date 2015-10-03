@@ -236,7 +236,7 @@ int main( int argc, char *argv[] )
 
  GetLineF( "L16", &L[16] );	/* Dividends. */
 
- GetLine( "L17", &L[17] );	/* Business profits, Fed Sched C. */
+ GetLineF( "L17", &L[17] );	/* Business profits, Fed Sched C. */
  if (L[17] < 0.0) L[17] = 0.0;
  showline(17);
 
@@ -261,7 +261,7 @@ int main( int argc, char *argv[] )
  L[26] = L[14] + L[15] + L[16] + L[17] + L[18] + L[19] + L[20] + L[21] + L[22] + L[23] + L[24] + L[25];
  showline_wmsg(26,"Total Income");	/* Total Income. */
 
- GetLineF( "L27a", &L27a );	/* Pension Exclusion (See pg 26). */
+ GetLineF( "L27a", &L27a );	/* Pension Exclusion (See pg 25). */
  GetLineF( "L27b", &L27b );	/* Other Retirement Income Exclusion (See worksheet pg 26). */
 
  L["27a"] = L27a;
@@ -457,7 +457,7 @@ int main( int argc, char *argv[] )
  if (L[37] > 0.0)
   fprintf(outfile, "L37c = %6.2f\n", L[37]);
 
- showline(39);
+ showline(38);
 
  fprintf(outfile,"\n");  /* NJ Taxable Income.*/
  // L[39] = L[36] - L[38];  /* Handled above in Sched-1. */
@@ -511,8 +511,11 @@ int main( int argc, char *argv[] )
    L[57] = L[55] - L[47];
    fprintf(outfile, "L57 = %6.2f	Overpayment\n", L[57] );
 
-   L[65] = 0.0;
-   showline_wmsg(65, "( Total Contributions from overpayment )");
+   GetLineF( "L58", &L[58] );	/* For next years tax */
+   showline_wmsg(58,"For next years tax");
+
+   L[65] = L[58];
+   showline_wmsg(65, "( Total Deductions from overpayment )");
    L[66] = L[57] - L[65];
    showline_wmsg(66, "Refund !!!");
   }

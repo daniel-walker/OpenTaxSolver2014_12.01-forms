@@ -1,0 +1,13 @@
+#!/bin/bash
+
+source $(dirname "$0")/fill_form_routine.sh
+
+fill_form $fill\_it203.xfdf it203_2014_fill_in.pdf $fill\_it203.pdf \
+"76b3be9da81d09469c8738c0bd195269" \
+"The NY IT-203 pdf has changed. Please report to dwalker@fifo99.com." \
+"http://www.tax.ny.gov/pdf/2014/fillin/inc/it203_2014_fill_in.pdf";
+
+fill_form $fill\_it203d.xfdf it203d_2014_fill_in.pdf $fill\_it203d.pdf \
+"b0488e6df1c2e4875487e56dbc1b8646" \
+"The NY IT-203-D has changed. Please report to dwalker@fifo99.com." \
+"http://www.tax.ny.gov/pdf/2014/fillin/inc/it203d_2014_fill_in.pdf";

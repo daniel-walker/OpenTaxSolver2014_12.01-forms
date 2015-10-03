@@ -3,12 +3,12 @@
 source $(dirname "$0")/fill_form_routine.sh
 
 fill_form $fill\_nj1040.xfdf 1040.pdf $fill\_nj1040.pdf \
-"MD5 (1040.pdf) = daee3e5ee57829754cdb5eabf3d0ab78" \
+"daee3e5ee57829754cdb5eabf3d0ab78" \
 "The NJ 1040 pdf has changed. Please report to dwalker@fifo99.com." \
 "http://www.state.nj.us/treasury/taxation/pdf/current/1040.pdf";
 
 fill_form $fill\_nj1040abc.xfdf 1040abc.pdf $fill\_nj1040abc.pdf \
-"MD5 (1040abc.pdf) = efd372a5c3cfd95c18d7be55c05b270a" \
+"efd372a5c3cfd95c18d7be55c05b270a" \
 "The NJ Schedule A&B has changed. Please report to dwalker@fifo99.com." \
 "http://www.state.nj.us/treasury/taxation/pdf/current/1040abc.pdf";
 

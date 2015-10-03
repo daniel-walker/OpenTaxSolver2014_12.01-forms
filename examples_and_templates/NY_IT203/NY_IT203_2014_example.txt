@@ -1,0 +1,95 @@
+Title:  NY State 2014 Tax Form IT-203
+
+{ -- Initial Template -- Common 0 amounts filled-in as 0's, }
+{     Important ???-amounts must be filled-in by most everyone. }
+
+PersonalFilename ../examples_and_templates/pers.txt
+
+FileName   examples_and_templates/US_1040/fed_out.txt { File-name of Federal Return output file. }
+	{ Data for NY Lines 1-19 is collected by scanning Federal return to avoid re-entering it. }
+
+Dependent  no		{ Are you a Dependent on another's return (yes/no) ? }
+
+Foreign_Account		  0	{ 1 if Yes, 0 otherwise }
+NYC_Months	      	  0 ; { Number of months you were resident in NYC }
+Spouse_NYC_Months	  0 ; { Number of months your spouse was resident in NYC }
+
+{Federal Income and Adjustments }
+  {	NOTE - Federal column values of this section are taken from Federal file. }
+  {	NOTE - NYS column values are taken from Federal column values if you enter FED instead of an explicit value}
+  {	NOTE - the .us extension on line number indicates the Fed column}
+  {	NOTE - the .ny extension on line number indicates the NYS column}
+
+L1.ny      ??? ;
+L2.ny	   0;		{dont take Taxable Interest from L8.us }	 
+L3.ny	   0;		{dont take Ordinary Dividends from L9.us }
+L4.ny	   0;		{NYS refund}
+L5.ny	   0;		{dont take Alimony received from fed L11.us }
+L6.ny	   0;		{dont take Business income/loss (fed sched C) from fed line L12.us }
+L7.ny	   0;		{dont take Capital gains/losses (fed sched D) from fed line l13.us }
+L8.ny	   0;		{dont take Other gains/losses (fed form 4794) from fed line L14 }
+L9.ny	   0;		{dont take Taxable IRA distributions from fed line usL15 }
+L10.ny	   0;		{dont take Taxable pension/annuity amounts from fed line usL16 }
+L11.ny	   0;		{take Rental, royalties, partnership, S corp, (fed sched E) from fed line 17 }
+L12	0;		{Rental portion of above}
+L13.ny	0;		{dont take Farm income (fed sched F) from us fed line 18 }
+L14.ny	0;		{dont take Unemployment compensation from us fed line 19}
+L15.ny	0;		{dont take Taxable Social Sec. benefits from us fed line 20 }
+L16.ny	FED;		{take Other income (pg. 80) from us fed line 20 }
+L18.ny	0;		{dont take Total federal adjustments to income (pg 20) from fed line 36}
+
+	{ NY Additions }
+L20.us	    0	;	{ Interest income from non-NY state or local bonds }
+L20.ny	    0	;	{ Interest income from non-NY state or local bonds }
+
+L21.us	    0	;	{ Public employee retirement contributions }
+L21.ny	    0	;	{ Public employee retirement contributions }
+
+L22.us	    0	;	{ Other (IT-225 line 9) }
+L22.ny	    0	;	{ Other (IT-225 line 9) }
+
+	{ NY Subtractions }
+
+L25.us	    0	;	{ Pensions of NYState, local & fed gov'ts (see page 24) }
+L25.ny	    0	;	{ Pensions of NYState, local & fed gov'ts (see page 24) }
+
+L27.us	    0	;	{ US Gov't Bond Interest }
+L27.ny	    0	;	{ US Gov't Bond Interest }
+
+L28.us	    0	;	{ Pension and annuity income exclusion }
+L28.ny	    0	;	{ Pension and annuity income exclusion }
+
+L29.us	    0	;	{ Other ( form IT-225 line 18) }
+L29.ny	    0	;	{ Other ( form IT-225 line 18) }
+
+LTcare%	    0   ;	{ Percent of long-term care premiums in Fed-Sched-A line 1, if any. }	
+AddAdj	    0   ;	{ Any additional itemization adjustments (worksheet line k pg 26) }
+CollegeDed  0   ;	{ College tuition itemized deduction (Form IT-272 ) }
+
+L35	    0	;	{ Number of Dependent Exemptions (Pg 26) }
+Exemptions  0		{ Number of NY dependent exemptions, Pg 26. }
+
+L41         0   ;       { NY Child care/dependent credit. pg. 28 }
+L43	    0	;	{ NY Earned income credit. pg. 28 }
+L47         0   ;       { NYC nonrefundable credits (from IT-203-ATT line 8) }
+L49	    0	;	{ Net Other New York State taxes, Form IT-203-ATT, line 33 }
+
+NYC_Resident  no ;      { City of New York Resident (yes/no) }
+
+ { City of New York taxes and crefits -- only }
+  L51            ;       { Part-year New York City resident tax }
+  L52            ;       { Part-year resident NYC child and dependent care credit }
+  L53            ;       { Yonkers nonresident earnings tax }
+  L54            ;	 { Part-year Yonkers resident income tax surcharge, attach Form IT-360.1 }
+
+L56	    0	;	{ Sales or use tax, pg 29. }
+L57	    0	;	{ Voluntary Gift contibutions, pg 30. }
+
+L61	    0	;	{ Other refundable credits, IT-203-ATT line 17)}
+L62	  ???   ;	{ Total NY State tax withheld. }
+L63      	; 	{ Total City of NY tax withheld. }
+L64      	; 	{ Yonkers tax withheld. }
+L65	    0	;	{ Total estimated tax payments (from IT-370) }
+L69         0   ;       {Amount to apply to next year's tax return}
+L71         0   ;       {Estimated tax penalty }
+L72         0   ;       {Other penalties }

@@ -52,3 +52,4 @@ L51        0    ;       { NJ Earned Income Tax Credit. (See Sched pg 38.) }
 L52        0    ;       { Excess NJ UI/HC/WD Withheld, (See pg 38.) }
 L53        0    ;       { Excess NJ Disability Insurance Withheld, (See pg 38.) }
 L54        0    ;       { Excess NJ Family Leave Insurance Withheld, (See pg 38.) }
+L58        0    ;       { for next years tax }
