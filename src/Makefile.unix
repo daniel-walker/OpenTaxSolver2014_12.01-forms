@@ -26,6 +26,7 @@ all: ../bin/taxsolve_US_1040_2014 \
      ../bin/taxsolve_NC_D400_2014 \
      ../bin/taxsolve_OH_IT1040_2014 \
      ../bin/taxsolve_NY_IT201_2014 \
+     ../bin/taxsolve_NY_IT203_2014 \
      ../bin/taxsolve_MA_1_2014 \
      ../bin/taxsolve_CA_540_2014 \
      ../Run_taxsolve_GUI
@@ -58,6 +59,9 @@ all: ../bin/taxsolve_US_1040_2014 \
 
 ../bin/taxsolve_NY_IT201_2014:       taxsolve_NY_IT201_2014.c          taxsolve_routines.c
 	$(CC) $(CFLAGS) $(COPTIM) -o  ../bin/taxsolve_NY_IT201_2014        taxsolve_NY_IT201_2014.c         $(SRCS) $(LIBS)
+
+../bin/taxsolve_NY_IT203_2014:       taxsolve_NY_IT203_2014.c          taxsolve_routines.c
+	$(CC) $(CFLAGS) $(COPTIM) -o  ../bin/taxsolve_NY_IT203_2014        taxsolve_NY_IT203_2014.c         $(SRCS) $(LIBS)
 
 ../bin/taxsolve_MA_1_2014:            taxsolve_MA_1_2014.c             taxsolve_routines.c
 	$(CC) $(CFLAGS) $(COPTIM) -o  ../bin/taxsolve_MA_1_2014            taxsolve_MA_1_2014.c             $(SRCS) $(LIBS)
